@@ -3,6 +3,8 @@
 
   <head>
     <title>HALforge</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="apple-touch-icon" href="/favicon.svg">
     <link rel="icon" type="image/svg" href="/favicon.svg">
     <link rel="manifest" href="/site.webmanifest">
@@ -18,838 +20,683 @@
 
   <body>
 
-    <div class="titlebar">
-      <a href="" target="_new"><img src="logo.svg"></a>
+    <div id="renderArea">
+      <div id="conetext" style="position:absolute;top:0px;left:0px; padding: 0px; display:none; z-index:100;"></div>
     </div>
-    <!-- <div class="appbar">Grbl.js</div> -->
 
-    <div class="flex-container">
+    <div class="container-left">
 
-      <div class="card">
-        <div class="card-header">DRO</div>
-        <table class="buttonspad">
-          <tr>
-            <td class="bd-radius-all">
-              <div class="dro dro-x">
-                <div class="axis">X</div>
-                <div class="xWPos dro-wpos">0.000</div>
-                <div class="xWPos dro-mpos">0.000</div>
+      <center>
+        <img src="./img/logo.svg">
+      </center>
+
+      <table class="buttonspad">
+        <tr>
+          <td colspan="8">
+            <div class="card-header">
+              DRO
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="bd-radius-all" colspan="3">
+            <div class="dro dro-x">
+              <div class="axis">X</div>
+              <div class="xWPos dro-wpos">9999.999</div>
+              <div class="xWPos dro-mpos">0.000</div>
+            </div>
+          </td>
+          <td><button class="jogbtn ripple singleaxishomingbtn" id="homexbtn" disabled>HOME X</button></td>
+          <td><button class="jogbtn ripple" id="gozeroxbtn">GO ZERO MACH X</button></td>
+          <td><button class="jogbtn ripple" id="setzeroxbtn">SET ZERO WORK X</button></td>
+          <td><button class="jogbtn ripple" id="gozeroxworkbtn">GO ZERO WORK X</button></td>
+          <td><button class="jogbtn ripple" id="probexbtn" disabled>PROBE X ZERO</button></td>
+        </tr>
+        <tr>
+          <td class="bd-radius-all" colspan="3">
+            <div class="dro dro-y">
+              <div class="axis">Y</div>
+              <div class="yWPos dro-wpos">0.000</div>
+              <div class="yMPos dro-mpos">0.000</div>
+            </div>
+          </td>
+          <td><button class="jogbtn ripple singleaxishomingbtn" id="homeybtn" disabled>HOME Y</button></td>
+          <td><button class="jogbtn ripple" id="gozeroybtn">GO ZERO MACH Y</button></td>
+          <td><button class="jogbtn ripple" id="setzeroybtn">SET ZERO WORK Y</button></td>
+          <td><button class="jogbtn ripple" id="gozeroyworkbtn">GO ZERO WORK Y</button></td>
+          <td><button class="jogbtn ripple" id="probeybtn" disabled>PROBE Y ZERO</button></td>
+        </tr>
+        <tr>
+          <td class="bd-radius-all" colspan="3">
+            <div class="dro dro-z">
+              <div class="axis">Z</div>
+              <div class="zWPos dro-wpos">0.000</div>
+              <div class="zMPos dro-mpos">0.000</div>
+            </div>
+          </td>
+          <td><button class="jogbtn ripple singleaxishomingbtn" id="homezbtn" disabled>HOME Z</button></td>
+          <td><button class="jogbtn ripple" id="gozerozbtn">GO ZERO MACH Z</button></td>
+          <td><button class="jogbtn ripple" id="setzerozbtn">SET ZERO WORK Z</button></td>
+          <td><button class="jogbtn ripple" id="gozerozworkbtn">GO ZERO WORK Z</button></td>
+          <td><button class="jogbtn ripple" id="probezbtn" disabled>PROBE Z ZERO</button></td>
+        </tr>
+        <tr>
+          <td class="bd-radius-all" colspan="3">
+            <div class="dro dro-a">
+              <div class="axis">A</div>
+              <div class="aWPos dro-wpos">0.000</div>
+              <div class="aMPos dro-mpos">0.000</div>
+            </div>
+          </td>
+          <td><button class="jogbtn ripple singleaxishomingbtn" id="homeabtn" disabled>HOME A</button></td>
+          <td><button class="jogbtn ripple" id="gozeroabtn">GO ZERO MACH A</button></td>
+          <td><button class="jogbtn ripple" id="setzeroabtn">SET ZERO WORK A</button></td>
+          <td><button class="jogbtn ripple" id="gozeroaworkbtn">GO ZERO WORK A</button></td>
+          <td><button class="jogbtn ripple" id="probeabtn" disabled>PROBE A ZERO</button></td>
+        </tr>
+        <tr>
+          <td class="bd-radius-all" colspan="3">
+            <div class="dro dro-f">
+              <div class="axis axis-f">F</div>
+              <div class="fVal dro-wpos">0.000</div>
+              <div class="fValOverride dro-mpos">0.000</div>
+            </div>
+          </td>
+          <td><button class="jogbtn ripple singleaxishomingbtn" id="homexyzbtn" disabled>HOME XYZ</button></td>
+          <td><button class="jogbtn ripple" id="gozeroxyzbtn">GO ZERO MACH XYZ</button></td>
+          <td><button class="jogbtn ripple" id="setzeroxyzbtn">SET ZERO WORK XYZ</button></td>
+          <td><button class="jogbtn ripple" id="gozeroxyzworkbtn">GO ZERO WORK XYZ</button></td>
+          <td><button class="jogbtn ripple" id="probexyzbtn" disabled>PROBE XYZ ZERO</button></td>
+        </tr>
+        <tr>
+          <td class="bd-radius-all" colspan="3">
+            <div class="dro dro-s">
+              <div class="axis axis-s">S</div>
+              <div class="sVal dro-wpos">0.000</div>
+              <div class="sValOverride dro-mpos">0.000</div>
+            </div>
+          </td>
+          <td><button class="jogbtn ripple led" id="m3btn">TOOL M3</button></td>
+          <td><button class="jogbtn ripple led" id="m4btn" disabled>TOOL M4</button></td>
+          <td><button class="jogbtn ripple led" id="m8btn">COOL FLUSH M8</button></td>
+          <td><button class="jogbtn ripple led" id="m7btn" disabled>COOL MIST M7</button></td>
+          <td></td>
+        </tr>
+
+        <tr>
+          <td colspan="8">
+            <div class="card-header">
+              WCS
+            </div>
+          </td>
+        </tr>
+
+
+
+        <tr>
+          <td></td>
+          <td><button class="jogbtn ripple wcsbtn led ledactive" id="g54btn">ACT G54 WCS</button></td>
+          <td><button class="jogbtn ripple wcsbtn led" id="g55btn">ACT G55 WCS</button></td>
+          <td><button class="jogbtn ripple wcsbtn led" id="g56btn">ACT G56 WCS</button></td>
+          <td><button class="jogbtn ripple wcsbtn led" id="g57btn">ACT G57 WCS</button></td>
+          <td><button class="jogbtn ripple wcsbtn led" id="g58btn">ACT G58 WCS</button></td>
+          <td><button class="jogbtn ripple wcsbtn led" id="g59btn">ACT G59 WCS</button></td>
+          <td></td>
+        </tr>
+
+        <tr>
+          <td colspan="8">
+            <div class="card-header">
+              JOG
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td colspan="4">
+            <div class="slider-container">
+              <label for="range-slider" class="slider-label">Jog Speed</label>
+              <input type="range" id="range-slider" class="slider" min="0" max="100" value="80">
+              <div class="tickmarks">
+                <span class="tick">0%</span>
+                <span class="tick">20%</span>
+                <span class="tick">40%</span>
+                <span class="tick">60%</span>
+                <span class="tick">80%</span>
+                <span class="tick">100%</span>
               </div>
-            </td>
-            <td><button class="jogbtn ripple singleaxishomingbtn" id="homexbtn" disabled>HOME X</button></td>
-            <td><button class="jogbtn ripple" id="gozeroxbtn">GO ZERO MACH X</button></td>
-            <td><button class="jogbtn ripple" id="setzeroxbtn">SET ZERO WORK X</button></td>
-            <td><button class="jogbtn ripple" id="gozeroxworkbtn">GO ZERO WORK X</button></td>
-            <td><button class="jogbtn ripple" id="probexbtn" disabled>PROBE X ZERO</button></td>
-          </tr>
-          <tr>
-            <td class="bd-radius-all">
-              <div class="dro dro-y">
-                <div class="axis">Y</div>
-                <div class="yWPos dro-wpos">0.000</div>
-                <div class="yMPos dro-mpos">0.000</div>
+            </div>
+
+          </td>
+
+          <td></td>
+          <td><button class="jogbtn ripple jogbtn-y" id="yP">
+              <span class="fa-layers fa-fw">
+                <i class="fas fa-arrow-up" data-fa-transform="grow-8 down-1.5"></i>
+                <span class="fa-layers-text" data-fa-transform="grow-5 up-24" style="font-weight:600">Y+</span>
+                <span class="fa-layers-text distlabel" data-fa-transform="grow-2 down-24" style="font-weight:600">10mm</span>
+              </span>
+            </button></td>
+          <td></td>
+          <td><button class="jogbtn ripple jogbtn-z" id="zP">
+              <span class="fa-layers fa-fw">
+                <i class="fas fa-arrow-up" data-fa-transform="grow-8 down-1.5"></i>
+                <span class="fa-layers-text" data-fa-transform="grow-5 up-24" style="font-weight:600">Z+</span>
+                <span class="fa-layers-text distlabel" data-fa-transform="grow-2 down-24" style="font-weight:600">10mm</span>
+              </span>
+            </button></td>
+
+
+        </tr>
+
+        <tr>
+          <td colspan="4">
+            <div class="slider-container">
+              <label for="range-slider" class="slider-label">Feed Override</label>
+              <input type="range" id="range-slider" class="slider" min="50" max="100" value="100">
+              <div class="tickmarks">
+                <span class="tick">50%</span>
+                <span class="tick">75%</span>
+                <span class="tick">100%</span>
+                <span class="tick">150%</span>
+                <span class="tick">200%</span>
               </div>
-            </td>
-            <td><button class="jogbtn ripple singleaxishomingbtn" id="homeybtn" disabled>HOME Y</button></td>
-            <td><button class="jogbtn ripple" id="gozeroybtn">GO ZERO MACH Y</button></td>
-            <td><button class="jogbtn ripple" id="setzeroybtn">SET ZERO WORK Y</button></td>
-            <td><button class="jogbtn ripple" id="gozeroyworkbtn">GO ZERO WORK Y</button></td>
-            <td><button class="jogbtn ripple" id="probeybtn" disabled>PROBE Y ZERO</button></td>
-          </tr>
-          <tr>
-            <td class="bd-radius-all">
-              <div class="dro dro-z">
-                <div class="axis">Z</div>
-                <div class="zWPos dro-wpos">0.000</div>
-                <div class="zMPos dro-mpos">0.000</div>
+            </div>
+          </td>
+          <td><button class="jogbtn ripple jogbtn-x" id="xM">
+              <span class="fa-layers fa-fw">
+                <i class="fas fa-arrow-left" data-fa-transform="grow-8 down-1.5"></i>
+                <span class="fa-layers-text" data-fa-transform="grow-5 up-24" style="font-weight:600">X-</span>
+                <span class="fa-layers-text distlabel" data-fa-transform="grow-2 down-24" style="font-weight:600">10mm</span>
+              </span>
+            </button></td>
+          <td><button class="jogbtn ripple jogbtn-y" id="yM">
+              <span class="fa-layers fa-fw">
+                <i class="fas fa-arrow-down" data-fa-transform="grow-8 down-1.5"></i>
+                <span class="fa-layers-text" data-fa-transform="grow-5 up-24" style="font-weight:600">Y-</span>
+                <span class="fa-layers-text distlabel" data-fa-transform="grow-2 down-24" style="font-weight:600">10mm</span>
+              </span>
+            </button></td>
+          <td><button class="jogbtn ripple jogbtn-x" id="xP">
+              <span class="fa-layers fa-fw">
+                <i class="fas fa-arrow-right" data-fa-transform="grow-8 down-1.5"></i>
+                <span class="fa-layers-text" data-fa-transform="grow-5 up-24" style="font-weight:600">X+</span>
+                <span class="fa-layers-text distlabel" data-fa-transform="grow-2 down-24" style="font-weight:600">10mm</span>
+              </span>
+            </button></td>
+          <td><button class="jogbtn ripple jogbtn-z" id="zM">
+              <span class="fa-layers fa-fw">
+                <i class="fas fa-arrow-down" data-fa-transform="grow-8 down-1.5"></i>
+                <span class="fa-layers-text" data-fa-transform="grow-5 up-24" style="font-weight:600">Z-</span>
+                <span class="fa-layers-text distlabel" data-fa-transform="grow-2 down-24" style="font-weight:600">10mm</span>
+              </span>
+            </button></td>
+
+
+        </tr>
+
+        <tr>
+          <td colspan="4">
+            <div class="slider-container">
+              <label for="range-slider" class="slider-label">Tool Override</label>
+              <input type="range" id="range-slider" class="slider" min="50" max="100" value="100">
+              <div class="tickmarks">
+                <span class="tick">50%</span>
+                <span class="tick">75%</span>
+                <span class="tick">100%</span>
+                <span class="tick">150%</span>
+                <span class="tick">200%</span>
               </div>
-            </td>
-            <td><button class="jogbtn ripple singleaxishomingbtn" id="homezbtn" disabled>HOME Z</button></td>
-            <td><button class="jogbtn ripple" id="gozerozbtn">GO ZERO MACH Z</button></td>
-            <td><button class="jogbtn ripple" id="setzerozbtn">SET ZERO WORK Z</button></td>
-            <td><button class="jogbtn ripple" id="gozerozworkbtn">GO ZERO WORK Z</button></td>
-            <td><button class="jogbtn ripple" id="probezbtn" disabled>PROBE Z ZERO</button></td>
-          </tr>
-          <tr>
-            <td class="bd-radius-all">
-              <div class="dro dro-f">
-                <div class="axis axis-f">F</div>
-                <div class="fVal dro-wpos">0.000</div>
-                <div class="fValOverride dro-mpos">0.000</div>
-              </div>
-            </td>
-            <td><button class="jogbtn ripple singleaxishomingbtn" id="homexyzbtn" disabled>HOME XYZ</button></td>
-            <td><button class="jogbtn ripple" id="gozeroxyzbtn">GO ZERO MACH XYZ</button></td>
-            <td><button class="jogbtn ripple" id="setzeroxyzbtn">SET ZERO WORK XYZ</button></td>
-            <td><button class="jogbtn ripple" id="gozeroxyzworkbtn">GO ZERO WORK XYZ</button></td>
-            <td><button class="jogbtn ripple" id="probexyzbtn" disabled>PROBE XYZ ZERO</button></td>
-          </tr>
-          <tr>
-            <td class="bd-radius-all">
-              <div class="dro dro-s">
-                <div class="axis axis-s">S</div>
-                <div class="sVal dro-wpos">0.000</div>
-                <div class="sValOverride dro-mpos">0.000</div>
-              </div>
-            </td>
-            <td><button class="jogbtn ripple led" id="m3btn">TOOL M3</button></td>
-            <td><button class="jogbtn ripple led" id="m4btn" disabled>TOOL M4</button></td>
-            <td><button class="jogbtn ripple led" id="m8btn">COOL FLUSH M8</button></td>
-            <td><button class="jogbtn ripple led" id="m7btn" disabled>COOL MIST M7</button></td>
-            <td><button class="jogbtn ripple" id="" disabled></button></td>
-          </tr>
-        </table>
-        </center>
+            </div>
+          </td>
+
+          <td><button class="jogbtn ripple distbtn led" id="dist01">0.1mm</button></td>
+          <td><button class="jogbtn ripple distbtn led" id="dist1">1mm</button></td>
+          <td><button class="jogbtn ripple distbtn led ledactive" id="dist10">10mm</button></td>
+          <td><button class="jogbtn ripple distbtn led" id="dist100">100mm</button></td>
+
+        </tr>
+
+        <tr>
+          <td colspan="8">
+            <div class="card-header">
+              MODE
+            </div>
+          </td>
+        </tr>
+
+
+
+        <tr>
+          <td></td>
+          <td><button class="jogbtn ripple unitsmodebtn led" id="g20btn">G20 INCH MODE</button></td>
+          <td><button class="jogbtn ripple distancemodebtn led" id="g90btn">G90 ABS MODE</button></td>
+          <td><button class="jogbtn ripple feedmodebtn led" id="g93btn">G93 INV TIME FEED</button></td>
+          <td><button class="jogbtn ripple unitsmodebtn led" id="g21btn">G21 MM MODE</button></td>
+          <td><button class="jogbtn ripple distancemodebtn led" id="g91btn">G91 INCR MODE</button></td>
+          <td><button class="jogbtn ripple feedmodebtn led" id="g94btn">G94 UNITS /MIN FEED</button></td>
+          <td></td>
+        </tr>
+
+
+
+
+        <tr>
+          <td colspan="8">
+            <div class="card-header">
+              OFFSETS
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td><button class="jogbtn ripple" id="" disabled>SET G28.1 OFFST</button></td>
+          <td><button class="jogbtn ripple" id="" disabled>GO G28.1 OFFST</button></td>
+          <td><button class="jogbtn ripple" id="" disabled>SET G30 OFFST</button></td>
+          <td><button class="jogbtn ripple" id="" disabled>GO G30 OFFST</button></td>
+          <td><button class="jogbtn ripple" id="" disabled>SET G92 OFFST</button></td>
+          <td><button class="jogbtn ripple" id="" disabled>CLEAR G92 OFFST</button></td>
+          <td><button class="jogbtn ripple led" id="g43.1btn" disabled>SET G43.1 TOOL COMP</button></td>
+          <td><button class="jogbtn ripple led" id="g49btn" disabled>NO TOOL COMP G49</button></td>
+        </tr>
+
+      </table>
+    </div>
+
+    <div class="container-right">
+
+      <center>
+        <img src="./img/logo.svg">
+      </center>
+
+      <div class="card-header">Interface</div>
+      <div class="InputAddOn">
+        <span class="InputAddOn-item"><i class="fab fa-usb"></i></span>
+        <input class="InputAddOn-field" type="text" list="portslist" id="ipAddress" value="192.168.0.106" autocomplete="on">
+        <datalist id="portslist">
+        </datalist>
+        <button type="button" class="InputAddOn-item success ripple" id="connectBtn">Connect</button>
+        <button type="button" class="InputAddOn-item alert ripple" id="disconnectBtn">Disconnect</button>
       </div>
 
+      <p id="status">Not connected</p>
 
-      <div class="card">
-        <div class="card-header">Override</div>
-
-        <div class="knob-surround">
-          <span id="currentfeed">0%</span>
-          <div id="knobfeed"></div>
-          <span class="knob-title">FEED</span>
-          <span class="knob-reset ripple"><button class="knob-reset-btn ripple" id="reset-feed">reset</button></span>
-          <div class="ticks">
-            <div class="ticksfeed activetick"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-            <div class="ticksfeed"></div>
-          </div>
-        </div>
-
-        <div class="knob-surround">
-          <span id="currentrapid">0%</span>
-          <div id="knobrapid"></div>
-          <span class="knob-title">RAPID</span>
-          <span class="knob-reset ripple"><button class="knob-reset-btn ripple" id="reset-rapid">reset</button></span>
-          <div class="ticks">
-            <div class="ticksrapid activetick"></div>
-            <div class="ticksrapid"></div>
-            <div class="ticksrapid"></div>
-            <div class="ticksrapid"></div>
-            <div class="ticksrapid"></div>
-            <div class="ticksrapid"></div>
-            <div class="ticksrapid"></div>
-            <div class="ticksrapid"></div>
-            <div class="ticksrapid"></div>
-            <div class="ticksrapid"></div>
-            <div class="ticksrapid"></div>
-            <div class="ticksrapid"></div>
-            <div class="ticksrapid"></div>
-            <div class="ticksrapid"></div>
-            <div class="ticksrapid"></div>
-            <div class="ticksrapid"></div>
-          </div>
-        </div>
-
-        <div class="knob-surround">
-          <span id="currentspeed">0%</span>
-          <div id="knobspeed"></div>
-          <span class="knob-title">SPEED</span>
-          <span class="knob-reset ripple"><button class="knob-reset-btn ripple" id="reset-speed">reset</button></span>
-          <div class="ticks">
-            <div class="ticksspeed activetick"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-            <div class="ticksspeed"></div>
-          </div>
-        </div>
+      <div class="monitor" id="console">
+        <ul id="log"></ul>
       </div>
 
-      <div class="card">
-        <div class="card-header">WCS / MODALS</div>
-        <center>
-          <table class="buttonspad">
-            <tr>
-              <td><button class="jogbtn ripple wcsbtn led ledactive" id="g54btn">ACT G54 WCS</button></td>
-              <td><button class="jogbtn ripple wcsbtn led" id="g55btn">ACT G55 WCS</button></td>
-              <td><button class="jogbtn ripple wcsbtn led" id="g56btn">ACT G56 WCS</button></td>
-              <td><button class="jogbtn ripple wcsbtn led" id="g57btn">ACT G57 WCS</button></td>
-              <td><button class="jogbtn ripple wcsbtn led" id="g58btn">ACT G58 WCS</button></td>
-              <td><button class="jogbtn ripple wcsbtn led" id="g59btn">ACT G59 WCS</button></td>
-            </tr>
-          </table>
-          <table class="buttonspad">
-            <tr>
-              <td><button class="jogbtn ripple unitsmodebtn led" id="g20btn">G20 INCH MODE</button></td>
-              <td></td>
-              <td><button class="jogbtn ripple distancemodebtn led" id="g90btn">G90 ABS MODE</button></td>
-              <td></td>
-              <td><button class="jogbtn ripple feedmodebtn led" id="g93btn">G93 INV TIME FEED</button></td>
-            </tr>
-            <tr>
-              <td><button class="jogbtn ripple unitsmodebtn led" id="g21btn">G21 MM MODE</button></td>
-              <td></td>
-              <td><button class="jogbtn ripple distancemodebtn led" id="g91btn">G91 INCR MODE</button></td>
-              <td></td>
-              <td><button class="jogbtn ripple feedmodebtn led" id="g94btn">G94 UNITS /MIN FEED</button></td>
-            </tr>
-          </table>
-          <table class="buttonspad">
-            <tr>
-              <td><button class="jogbtn ripple" id="" disabled>SET G28.1 OFFST</button></td>
-              <td></td>
-              <td><button class="jogbtn ripple" id="" disabled>SET G30 OFFST</button></td>
-              <td></td>
-              <td><button class="jogbtn ripple" id="" disabled>SET G92 OFFST</button></td>
-              <td></td>
-              <td><button class="jogbtn ripple led" id="g43.1btn" disabled>SET G43.1 TOOL COMP</button></td>
-
-            </tr>
-            <tr>
-              <td><button class="jogbtn ripple" id="" disabled>GO G28.1 OFFST</button></td>
-              <td></td>
-              <td><button class="jogbtn ripple" id="" disabled>GO G30 OFFST</button></td>
-              <td></td>
-              <td><button class="jogbtn ripple" id="" disabled>CLEAR G92 OFFST</button></td>
-              <td></td>
-              <td><button class="jogbtn ripple led" id="g49btn" disabled>NO TOOL COMP G49</button></td>
-            </tr>
-          </table>
-        </center>
-      </div>
-
-      <div class="card">
-        <div class="card-header">JOG</div>
-        <table>
-          <tr>
-            <td rowspan="2">
-              <button class="jogbtn ripple jogbtn-x" id="xM">
-                <span class="fa-layers fa-fw">
-                  <i class="fas fa-arrow-left" data-fa-transform="grow-8 down-1.5"></i>
-                  <span class="fa-layers-text" data-fa-transform="grow-5 up-24" style="font-weight:600">X-</span>
-                  <span class="fa-layers-text distlabel" data-fa-transform="grow-2 down-24" style="font-weight:600">10mm</span>
-                </span>
-              </button>
-            </td>
-            <td>
-              <button class="jogbtn ripple jogbtn-y" id="yP">
-                <span class="fa-layers fa-fw">
-                  <i class="fas fa-arrow-up" data-fa-transform="grow-8 down-1.5"></i>
-                  <span class="fa-layers-text" data-fa-transform="grow-5 up-24" style="font-weight:600">Y+</span>
-                  <span class="fa-layers-text distlabel" data-fa-transform="grow-2 down-24" style="font-weight:600">10mm</span>
-                </span>
-              </button>
-            </td>
-            <td rowspan="2">
-              <button class="jogbtn ripple jogbtn-x" id="xP">
-                <span class="fa-layers fa-fw">
-                  <i class="fas fa-arrow-right" data-fa-transform="grow-8 down-1.5"></i>
-                  <span class="fa-layers-text" data-fa-transform="grow-5 up-24" style="font-weight:600">X+</span>
-                  <span class="fa-layers-text distlabel" data-fa-transform="grow-2 down-24" style="font-weight:600">10mm</span>
-                </span>
-              </button>
-            </td>
-            <td>
-              <button class="jogbtn ripple jogbtn-z" id="zP">
-                <span class="fa-layers fa-fw">
-                  <i class="fas fa-arrow-up" data-fa-transform="grow-8 down-1.5"></i>
-                  <span class="fa-layers-text" data-fa-transform="grow-5 up-24" style="font-weight:600">Z+</span>
-                  <span class="fa-layers-text distlabel" data-fa-transform="grow-2 down-24" style="font-weight:600">10mm</span>
-                </span>
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <button class="jogbtn ripple jogbtn-y" id="yM">
-                <span class="fa-layers fa-fw">
-                  <i class="fas fa-arrow-down" data-fa-transform="grow-8 down-1.5"></i>
-                  <span class="fa-layers-text" data-fa-transform="grow-5 up-24" style="font-weight:600">Y-</span>
-                  <span class="fa-layers-text distlabel" data-fa-transform="grow-2 down-24" style="font-weight:600">10mm</span>
-                </span>
-              </button>
-            </td>
-            <td>
-              <button class="jogbtn ripple jogbtn-z" id="zM">
-                <span class="fa-layers fa-fw">
-                  <i class="fas fa-arrow-down" data-fa-transform="grow-8 down-1.5"></i>
-                  <span class="fa-layers-text" data-fa-transform="grow-5 up-24" style="font-weight:600">Z-</span>
-                  <span class="fa-layers-text distlabel" data-fa-transform="grow-2 down-24" style="font-weight:600">10mm</span>
-                </span>
-              </button>
-            </td>
-          </tr>
-        </table>
-
-        <table>
-          <tr>
-            <td><button class="jogbtn ripple distbtn led" id="dist01">0.1mm</button></td>
-            <td><button class="jogbtn ripple distbtn led" id="dist1">1mm</button></td>
-            <td><button class="jogbtn ripple distbtn led ledactive" id="dist10">10mm</button></td>
-            <td><button class="jogbtn ripple distbtn led" id="dist100">100mm</button></td>
-          </tr>
-        </table>
-      </div>
-
-      <div class="card">
-        <div class="card-header">JOG RATE</div>
-        <div class="knob-surround">
-          <span id="currentxyjograte">0 mm/min</span>
-          <span id="unitzjograte">mm/min</span>
-          <div id="knobxyjograte"></div>
-          <span class="knob-title">XY&nbsp;JOG&nbsp;RATE</span>
-          <!-- <span class="knob-reset ripple"><button class="knob-reset-btn ripple" id="reset-feed">reset</button></span> -->
-          <div class="ticks">
-            <div class="ticksxyjograte activetick"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-            <div class="ticksxyjograte"></div>
-          </div>
-        </div>
-        <div class="knob-surround">
-          <span id="currentzjograte">0 mm/min</span>
-          <span id="unitzjograte">mm/min</span>
-          <div id="knobzjograte"></div>
-          <span class="knob-title">Z&nbsp;JOG&nbsp;RATE</span>
-          <!-- <span class="knob-reset ripple"><button class="knob-reset-btn ripple" id="reset-feed">reset</button></span> -->
-          <div class="ticks">
-            <div class="tickszjograte activetick"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-            <div class="tickszjograte"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">Interface</div>
+      <form onsubmit="addMessage(); return false;">
         <div class="InputAddOn">
-          <span class="InputAddOn-item"><i class="fab fa-usb"></i></span>
-          <input class="InputAddOn-field" type="text" list="portslist" id="ipAddress" value="192.168.0.106" autocomplete="on">
-          <datalist id="portslist">
-          </datalist>
-          <button type="button" class="InputAddOn-item success ripple" id="connectBtn">Connect</button>
-          <button type="button" class="InputAddOn-item alert ripple" id="disconnectBtn">Disconnect</button>
+          <span class="InputAddOn-item"><i class="fas fa-terminal"></i></span>
+          <input type="text" class="InputAddOn-field" placeholder="" aria-label="Console Command" id="chat">
+          <button class="InputAddOn-item ripple" type="button" onclick="$('#log').empty();"><i class="fas fa-trash"></i></button>
         </div>
+      </form>
 
-        <p id="status">Not connected</p>
+      <div class="card-header">SIM / 3D View</div>
 
-        <div class="monitor" id="console">
-          <ul id="log"></ul>
-        </div>
+      <button class="btn ripple" onclick="simSpeed();"><i class="fas fa-tachometer-alt"></i> <span id="simspeedval">1</span>x</button>
+      <button id="runSimBtn" title="Run simulation" class="btn ripple" onclick="sim(0)"><i class="fas fa-fighter-jet"></i> Simulate</button>
+      <button id="stopSimBtn" style="display: none;" title="Stop Sim" class="btn ripple" onclick="simstop()"><i class="fas fa-stop"></i> Stop Sim</button>
+      <button id="resetViewBtn" title="Resets camera angle and zoom" class="btn ripple" onclick="resetView(object)"><i class="fas fa-stop"></i> Reset View</button>
 
-        <form onsubmit="addMessage(); return false;">
-          <div class="InputAddOn">
-            <span class="InputAddOn-item"><i class="fas fa-terminal"></i></span>
-            <input type="text" class="InputAddOn-field" placeholder="" aria-label="Console Command" id="chat">
-            <button class="InputAddOn-item ripple" type="button" onclick="$('#log').empty();"><i class="fas fa-trash"></i></button>
-          </div>
-        </form>
+      <div class="card-header">SD Card</div>
+      <button id="refreshBtn" class="btn ripple"><i class="fas fa-sync-alt"></i> Refresh SD</button>
+      <button id="uploadSDbtn" class="btn ripple btn-file"><i class="fas fa-upload"></i><input class="btn-file" id="file" type="file" accept=".gcode, .gc, .tap, .nc, .cnc" />&nbsp;Upload</button>
+      <div style="height: 200px; overflow-y: auto; ">
+        <table id="fileTable" class="table">
+          <thead>
+            <tr>
+              <th>File Name</th>
+              <th>Size</th>
+              <!-- <th>Last Modified</th> -->
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="fileList"></tbody>
+        </table>
       </div>
 
+      <div class="card-header">Parameters</div>
+      <div style="height: 170px; overflow-y: auto; ">
 
-      <div class="card">
-        <div class="card-header">Job</div>
-        <div class="button-group">
-          <button type="button" class="button-group-item jogbtn ripple" id="playBtn"><i class="fas fa-play"></i></button>
-          <button type="button" class="button-group-item jogbtn ripple" id="pauseBtn"><i class="fas fa-pause"></i></button>
-          <button type="button" class="button-group-item jogbtn ripple" id="resumeBtn"><i class="fas fa-play"></i></button>
-          <button type="button" class="button-group-item jogbtn ripple" id="stopBtn"><i class="fas fa-stop"></i></button>
-          <button type="button" class="button-group-item jogbtn ripple" id="clearAlarmBtn">
-            <span class="fa-layers" data-toggle="tooltip" data-placement="bottom" title="Flashes red when machine has entered ALARM state, click Clear Alarm button">
-              <i id="navbell" class="fas fa-bell text-alert" style="display: none;"></i>
-              <i class="far fa-bell"></i>
-            </span>
-          </button>
-        </div>
-
-      </div>
-
-      <div class="card">
-        <div class="card-header">Parameters</div>
-        <div style="height: 200px; overflow-y: auto; ">
-
-          <table class="table">
-            <tr>
-              <th scope="col">Accesories</th>
-              <th scope="col"></th>
-              <th scope="col">State</th>
-            </tr>
-            <tr>
-              <th scope="row">SPINDLE</th>
-              <td></td>
-              <td class="accSpindle"></td>
-            </tr>
-            <tr>
-              <th scope="row">COOLANT</th>
-              <td></td>
-              <td class="accCoolant"></td>
-            </tr>
-            <tr>
-              <th scope="row">MIST</th>
-              <td></td>
-              <td class="accMist"></td>
-            </tr>
-            <tr>
-              <th scope="col">Position</th>
-              <th scope="col">Work</th>
-              <th scope="col">Machine</th>
-            </tr>
-            <tr>
-              <th scope="row">X</th>
-              <td class="xWPos">0.00</td>
-              <td class="xMPos">0.00</td>
-            </tr>
-            <tr>
-              <th scope="row">Y</th>
-              <td class="yWPos">0.00</td>
-              <td class="yMPos">0.00</td>
-            </tr>
-            <tr>
-              <th scope="row">Z</th>
-              <td class="zWPos">0.00</td>
-              <td class="zMPos">0.00</td>
-            </tr>
-            <tr>
-              <th scope="col">Overrides</th>
-              <th scope="col">Actual</th>
-              <th scope="col">Override</th>
-            </tr>
-            <tr>
-              <th scope="row">M3 Sxx</th>
-              <td class="sVal">0</td>
-              <td class="sValOverride">0</td>
-            </tr>
-            <tr>
-              <th scope="row">G1 F</th>
-              <td class="fVal">0</td>
-              <td class="fValOverride">0</td>
-            </tr>
-            <tr>
-              <th scope="row">Rapid</th>
-              <td class="rapidVal"></td>
-              <td class="rapidOverride">0</td>
-            </tr>
-            <tr>
-              <th scope="col">Modal</th>
-              <th scope="col">
-              </th>
-              <th scope="col">Value</th>
-            </tr>
-            <tr>
-              <th scope="row">Motion Mode</th>
-              <td></td>
-              <td class="motionmode"></td>
-            </tr>
-            <tr>
-              <th scope="row">Coordinate System Select</th>
-              <td></td>
-              <td class="coordinatesys"></td>
-            </tr>
-            <tr>
-              <th scope="row">Plane Select</th>
-              <td></td>
-              <td class="plane"></td>
-            </tr>
-            <tr>
-              <th scope="row">Distance Mode</th>
-              <td></td>
-              <td class="distancemode"></td>
-            </tr>
-            <tr>
-              <th scope="row">Arc IJK Distance Mode</th>
-              <td></td>
-              <td class="arcdistmode"></td>
-            </tr>
-            <tr>
-              <th scope="row">Feed Rate Mode</th>
-              <td></td>
-              <td class="feedratemode"></td>
-            </tr>
-            <tr>
-              <th scope="row">Units Mode</th>
-              <td></td>
-              <td class="unitsmode"></td>
-            </tr>
-            <tr>
-              <th scope="row">Tool Length set</th>
-              <td></td>
-              <td class="tlomode"></td>
-            </tr>
-            <tr>
-              <th scope="row">Program Mode</th>
-              <td></td>
-              <td class="programmode"></td>
-            </tr>
-            <tr>
-              <th scope="row">Spindle State</th>
-              <td></td>
-              <td class="spindlestate"></td>
-            </tr>
-            <tr>
-              <th scope="row">Coolant State</th>
-              <td></td>
-              <td class="coolantstate"></td>
-            </tr>
-            <tr>
-              <th scope="row">Cutter Radius Compensation </th>
-              <td></td>
-              <td class="radiuscomp"></td>
-            </tr>
-            <tr>
-              <th scope="row">Modal Tool T?</th>
-              <td></td>
-              <td class="modaltool"></td>
-            </tr>
-            <tr>
-              <th scope="row">Modal Spindle S? </th>
-              <td></td>
-              <td class="modalspindle"></td>
-            </tr>
-            <tr>
-              <th scope="row">Modal Feedrate F? </th>
-              <td></td>
-              <td class="modalfeedrate"></td>
-            </tr>
-            <tr>
-              <th scope="col">Info</th>
-              <th scope="col">
-              </th>
-              <th scope="col">Value</th>
-            </tr>
-            <tr>
-              <th scope="row">blocked</th>
-              <td></td>
-              <td><span class="commsBlocked"></span></td>
-            </tr>
-            <tr>
-              <th scope="row">connectionStatus</th>
-              <td></td>
-              <td><span class="commsConnectionStatus"></span></td>
-            </tr>
-            <tr>
-              <th scope="row">USB Connection</th>
-              <td></td>
-              <td><span class="activeConnection"></span></td>
-            </tr>
-            <tr>
-              <th scope="row">Buffer</th>
-              <td></td>
-              <td><span class="commsBuffer"></span></td>
-            </tr>
-            <tr>
-              <th scope="row">Queue</th>
-              <td></td>
-              <td><span class="commsQueue"></span></td>
-            </tr>
-            <tr>
-              <th scope="row">IP</th>
-              <td></td>
-              <td><span class="driverIP"></span></td>
-            </tr>
-            <tr>
-              <th scope="row">O/S</th>
-              <td></td>
-              <td><span class="driverOS"></span></td>
-            </tr>
-            <tr>
-              <th scope="row">Version</th>
-              <td></td>
-              <td><span class="driverVer"></span></td>
-            </tr>
-            <tr>
-              <th scope="row">Grbl Version</th>
-              <td></td>
-              <td><span class="grblVer"></span></td>
-            </tr>
-            <tr>
-              <th scope="col">Compiled</th>
-              <th scope="col">
-              </th>
-              <th scope="col">Value</th>
-            </tr>
-            <tr>
-              <th scope="row">Variable Spindle</th>
-              <td></td>
-              <td class="enVariableSpindle"></td>
-            </tr>
-            <tr>
-              <th scope="row">Laser Mode Enabled ($32 Setting)</th>
-              <td></td>
-              <td class="enLaser"></td>
-            </tr>
-            <tr>
-              <th scope="row">Grbl-Servo Installed</th>
-              <td></td>
-              <td class="enServo"></td>
-            </tr>
-            <tr>
-              <th scope="row">Line Numbers Enabled</th>
-              <td></td>
-              <td class="enLineNumbers"></td>
-            </tr>
-            <tr>
-              <th scope="row">Mist Cooling Enabled</th>
-              <td></td>
-              <td class="enMisting"></td>
-            </tr>
-            <tr>
-              <th scope="row">CoreXY Enabled</th>
-              <td></td>
-              <td class="enCoreXY"></td>
-            </tr>
-            <tr>
-              <th scope="row">Parking Motion Enabled</th>
-              <td></td>
-              <td class="enParking"></td>
-            </tr>
-            <tr>
-              <th scope="row">Homing Force Origin Enabled</th>
-              <td></td>
-              <td class="enHomingOrigin"></td>
-            </tr>
-            <tr>
-              <th scope="row">Single Axis Homing</th>
-              <td></td>
-              <td class="enSingleAxisHome"></td>
-            </tr>
-            <tr>
-              <th scope="row">Two Limit Switches on Axis Enabled</th>
-              <td></td>
-              <td class="enTwoLimits"></td>
-            </tr>
-            <tr>
-              <th scope="row">Allow Feed Override in Probe</th>
-              <td></td>
-              <td class="enFeedOVProbe"></td>
-            </tr>
-            <tr>
-              <th scope="row">Restore EEPROM $-settings Disabled</th>
-              <td></td>
-              <td class="enEepromSettingsDisable"></td>
-            </tr>
-            <tr>
-              <th scope="row">Restore EEPROM parameter Disabled</th>
-              <td></td>
-              <td class="enEepromParamsDisable"></td>
-            </tr>
-            <tr>
-              <th scope="row">Build Info Write Disabled</th>
-              <td></td>
-              <td class="enBuildInfoDisabled"></td>
-            </tr>
-            <tr>
-              <th scope="row">Force Sync on EEPROM write Disabled</th>
-              <td></td>
-              <td class="enForceSyncEeprom"></td>
-            </tr>
-            <tr>
-              <th scope="row">Force Sync on WCO Disabled</th>
-              <td></td>
-              <td class="enForceSyncWco"></td>
-            </tr>
-            <tr>
-              <th scope="row">Homing Init Lock</th>
-              <td></td>
-              <td class="enHomingInitLock"></td>
-            </tr>
-            <tr>
-              <th scope="row">Dual Motor Homing</th>
-              <td></td>
-              <td class="enDualAxisHoming"></td>
-            </tr>
-            <tr>
-              <th scope="col">Pins</th>
-              <th scope="col">
-              </th>
-              <th scope="col">Value</th>
-            </tr>
-            <tr>
-              <th scope="row">X-Limit</th>
-              <td></td>
-              <td class="xpin" class="pinstatus">NOCOMM</td>
-            </tr>
-            <tr>
-              <th scope="row">Y-Limit</th>
-              <td></td>
-              <td class="ypin" class="pinstatus">NOCOMM</td>
-            </tr>
-            <tr>
-              <th scope="row">Z-Limit</th>
-              <td></td>
-              <td class="zpin" class="pinstatus">NOCOMM</td>
-            </tr>
-            <tr>
-              <th scope="row">Probe</th>
-              <td></td>
-              <td class="prbpin" class="pinstatus">NOCOMM</td>
-            </tr>
-            <tr>
-              <th scope="row">Door Sensor</th>
-              <td></td>
-              <td class="doorpin" class="pinstatus">NOCOMM</td>
-            </tr>
-            <tr>
-              <th scope="row">Start Button</th>
-              <td></td>
-              <td class="startpin" class="pinstatus">NOCOMM</td>
-            </tr>
-            <tr>
-              <th scope="row">Hold Button</th>
-              <td></td>
-              <td class="holdpin" class="pinstatus">NOCOMM</td>
-            </tr>
-            <tr>
-              <th scope="row">Reset Button</th>
-              <td></td>
-              <td class="resetpin" class="pinstatus">NOCOMM</td>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">3D View</div>
-
-        <button class="btn ripple" onclick="simSpeed();"><i class="fas fa-tachometer-alt"></i> <span id="simspeedval">1</span>x</button>
-        <button id="runSimBtn" title="Run simulation" class="btn ripple" onclick="sim(0)"><i class="fas fa-fighter-jet"></i> Simulate</button>
-        <button id="stopSimBtn" style="display: none;" title="Stop Sim" class="btn ripple" onclick="simstop()"><i class="fas fa-stop"></i> Stop Sim</button>
-        <button id="resetViewBtn" title="Resets camera angle and zoom" class="btn ripple" onclick="resetView(object)"><i class="fas fa-stop"></i> Reset View</button>
-
-
-        <div id="renderArea"></div>
-
-        <div id="conetext" style="position:absolute;top:0px;left:0px; padding: 0px; display:none; z-index:100;"></div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">SD Card</div>
-        <button id="refreshBtn" class="btn ripple"><i class="fas fa-sync-alt"></i> Refresh SD</button>
-        <button id="uploadSDbtn" class="btn ripple btn-file"><i class="fas fa-upload"></i><input class="btn-file" id="file" type="file" accept=".gcode, .gc, .tap, .nc, .cnc" />&nbsp;Upload</button>
-
-
-        <!-- File upload section -->
-        <!-- <div>
-          <label for="fileInput">Upload File:</label>
-          <input type="file" id="fileInput" />
-          <button id="uploadBtn" disabled>Upload</button>
-        </div> -->
-
-
-
-
-
-        <div style="height: 200px; overflow-y: auto; ">
-          <table id="fileTable">
-            <thead>
-              <tr>
-                <th>File Name</th>
-                <th>Size</th>
-                <th>Last Modified</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="fileList"></tbody>
-          </table>
-        </div>
+        <table class="table">
+          <tr>
+            <th scope="col">Accesories</th>
+            <th scope="col"></th>
+            <th scope="col">State</th>
+          </tr>
+          <tr>
+            <th scope="row">SPINDLE</th>
+            <td></td>
+            <td class="accSpindle"></td>
+          </tr>
+          <tr>
+            <th scope="row">COOLANT</th>
+            <td></td>
+            <td class="accCoolant"></td>
+          </tr>
+          <tr>
+            <th scope="row">MIST</th>
+            <td></td>
+            <td class="accMist"></td>
+          </tr>
+          <tr>
+            <th scope="col">Position</th>
+            <th scope="col">Work</th>
+            <th scope="col">Machine</th>
+          </tr>
+          <tr>
+            <th scope="row">X</th>
+            <td class="xWPos">0.00</td>
+            <td class="xMPos">0.00</td>
+          </tr>
+          <tr>
+            <th scope="row">Y</th>
+            <td class="yWPos">0.00</td>
+            <td class="yMPos">0.00</td>
+          </tr>
+          <tr>
+            <th scope="row">Z</th>
+            <td class="zWPos">0.00</td>
+            <td class="zMPos">0.00</td>
+          </tr>
+          <tr>
+            <th scope="col">Overrides</th>
+            <th scope="col">Actual</th>
+            <th scope="col">Override</th>
+          </tr>
+          <tr>
+            <th scope="row">M3 Sxx</th>
+            <td class="sVal">0</td>
+            <td class="sValOverride">0</td>
+          </tr>
+          <tr>
+            <th scope="row">G1 F</th>
+            <td class="fVal">0</td>
+            <td class="fValOverride">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Rapid</th>
+            <td class="rapidVal"></td>
+            <td class="rapidOverride">0</td>
+          </tr>
+          <tr>
+            <th scope="col">Modal</th>
+            <th scope="col">
+            </th>
+            <th scope="col">Value</th>
+          </tr>
+          <tr>
+            <th scope="row">Motion Mode</th>
+            <td></td>
+            <td class="motionmode"></td>
+          </tr>
+          <tr>
+            <th scope="row">Coordinate System Select</th>
+            <td></td>
+            <td class="coordinatesys"></td>
+          </tr>
+          <tr>
+            <th scope="row">Plane Select</th>
+            <td></td>
+            <td class="plane"></td>
+          </tr>
+          <tr>
+            <th scope="row">Distance Mode</th>
+            <td></td>
+            <td class="distancemode"></td>
+          </tr>
+          <tr>
+            <th scope="row">Arc IJK Distance Mode</th>
+            <td></td>
+            <td class="arcdistmode"></td>
+          </tr>
+          <tr>
+            <th scope="row">Feed Rate Mode</th>
+            <td></td>
+            <td class="feedratemode"></td>
+          </tr>
+          <tr>
+            <th scope="row">Units Mode</th>
+            <td></td>
+            <td class="unitsmode"></td>
+          </tr>
+          <tr>
+            <th scope="row">Tool Length set</th>
+            <td></td>
+            <td class="tlomode"></td>
+          </tr>
+          <tr>
+            <th scope="row">Program Mode</th>
+            <td></td>
+            <td class="programmode"></td>
+          </tr>
+          <tr>
+            <th scope="row">Spindle State</th>
+            <td></td>
+            <td class="spindlestate"></td>
+          </tr>
+          <tr>
+            <th scope="row">Coolant State</th>
+            <td></td>
+            <td class="coolantstate"></td>
+          </tr>
+          <tr>
+            <th scope="row">Cutter Radius Compensation </th>
+            <td></td>
+            <td class="radiuscomp"></td>
+          </tr>
+          <tr>
+            <th scope="row">Modal Tool T?</th>
+            <td></td>
+            <td class="modaltool"></td>
+          </tr>
+          <tr>
+            <th scope="row">Modal Spindle S? </th>
+            <td></td>
+            <td class="modalspindle"></td>
+          </tr>
+          <tr>
+            <th scope="row">Modal Feedrate F? </th>
+            <td></td>
+            <td class="modalfeedrate"></td>
+          </tr>
+          <tr>
+            <th scope="col">Info</th>
+            <th scope="col">
+            </th>
+            <th scope="col">Value</th>
+          </tr>
+          <tr>
+            <th scope="row">blocked</th>
+            <td></td>
+            <td><span class="commsBlocked"></span></td>
+          </tr>
+          <tr>
+            <th scope="row">connectionStatus</th>
+            <td></td>
+            <td><span class="commsConnectionStatus"></span></td>
+          </tr>
+          <tr>
+            <th scope="row">USB Connection</th>
+            <td></td>
+            <td><span class="activeConnection"></span></td>
+          </tr>
+          <tr>
+            <th scope="row">Buffer</th>
+            <td></td>
+            <td><span class="commsBuffer"></span></td>
+          </tr>
+          <tr>
+            <th scope="row">Queue</th>
+            <td></td>
+            <td><span class="commsQueue"></span></td>
+          </tr>
+          <tr>
+            <th scope="row">IP</th>
+            <td></td>
+            <td><span class="driverIP"></span></td>
+          </tr>
+          <tr>
+            <th scope="row">O/S</th>
+            <td></td>
+            <td><span class="driverOS"></span></td>
+          </tr>
+          <tr>
+            <th scope="row">Version</th>
+            <td></td>
+            <td><span class="driverVer"></span></td>
+          </tr>
+          <tr>
+            <th scope="row">Grbl Version</th>
+            <td></td>
+            <td><span class="grblVer"></span></td>
+          </tr>
+          <tr>
+            <th scope="col">Compiled</th>
+            <th scope="col">
+            </th>
+            <th scope="col">Value</th>
+          </tr>
+          <tr>
+            <th scope="row">Variable Spindle</th>
+            <td></td>
+            <td class="enVariableSpindle"></td>
+          </tr>
+          <tr>
+            <th scope="row">Laser Mode Enabled ($32 Setting)</th>
+            <td></td>
+            <td class="enLaser"></td>
+          </tr>
+          <tr>
+            <th scope="row">Grbl-Servo Installed</th>
+            <td></td>
+            <td class="enServo"></td>
+          </tr>
+          <tr>
+            <th scope="row">Line Numbers Enabled</th>
+            <td></td>
+            <td class="enLineNumbers"></td>
+          </tr>
+          <tr>
+            <th scope="row">Mist Cooling Enabled</th>
+            <td></td>
+            <td class="enMisting"></td>
+          </tr>
+          <tr>
+            <th scope="row">CoreXY Enabled</th>
+            <td></td>
+            <td class="enCoreXY"></td>
+          </tr>
+          <tr>
+            <th scope="row">Parking Motion Enabled</th>
+            <td></td>
+            <td class="enParking"></td>
+          </tr>
+          <tr>
+            <th scope="row">Homing Force Origin Enabled</th>
+            <td></td>
+            <td class="enHomingOrigin"></td>
+          </tr>
+          <tr>
+            <th scope="row">Single Axis Homing</th>
+            <td></td>
+            <td class="enSingleAxisHome"></td>
+          </tr>
+          <tr>
+            <th scope="row">Two Limit Switches on Axis Enabled</th>
+            <td></td>
+            <td class="enTwoLimits"></td>
+          </tr>
+          <tr>
+            <th scope="row">Allow Feed Override in Probe</th>
+            <td></td>
+            <td class="enFeedOVProbe"></td>
+          </tr>
+          <tr>
+            <th scope="row">Restore EEPROM $-settings Disabled</th>
+            <td></td>
+            <td class="enEepromSettingsDisable"></td>
+          </tr>
+          <tr>
+            <th scope="row">Restore EEPROM parameter Disabled</th>
+            <td></td>
+            <td class="enEepromParamsDisable"></td>
+          </tr>
+          <tr>
+            <th scope="row">Build Info Write Disabled</th>
+            <td></td>
+            <td class="enBuildInfoDisabled"></td>
+          </tr>
+          <tr>
+            <th scope="row">Force Sync on EEPROM write Disabled</th>
+            <td></td>
+            <td class="enForceSyncEeprom"></td>
+          </tr>
+          <tr>
+            <th scope="row">Force Sync on WCO Disabled</th>
+            <td></td>
+            <td class="enForceSyncWco"></td>
+          </tr>
+          <tr>
+            <th scope="row">Homing Init Lock</th>
+            <td></td>
+            <td class="enHomingInitLock"></td>
+          </tr>
+          <tr>
+            <th scope="row">Dual Motor Homing</th>
+            <td></td>
+            <td class="enDualAxisHoming"></td>
+          </tr>
+          <tr>
+            <th scope="col">Pins</th>
+            <th scope="col">
+            </th>
+            <th scope="col">Value</th>
+          </tr>
+          <tr>
+            <th scope="row">X-Limit</th>
+            <td></td>
+            <td class="xpin" class="pinstatus">NOCOMM</td>
+          </tr>
+          <tr>
+            <th scope="row">Y-Limit</th>
+            <td></td>
+            <td class="ypin" class="pinstatus">NOCOMM</td>
+          </tr>
+          <tr>
+            <th scope="row">Z-Limit</th>
+            <td></td>
+            <td class="zpin" class="pinstatus">NOCOMM</td>
+          </tr>
+          <tr>
+            <th scope="row">Probe</th>
+            <td></td>
+            <td class="prbpin" class="pinstatus">NOCOMM</td>
+          </tr>
+          <tr>
+            <th scope="row">Door Sensor</th>
+            <td></td>
+            <td class="doorpin" class="pinstatus">NOCOMM</td>
+          </tr>
+          <tr>
+            <th scope="row">Start Button</th>
+            <td></td>
+            <td class="startpin" class="pinstatus">NOCOMM</td>
+          </tr>
+          <tr>
+            <th scope="row">Hold Button</th>
+            <td></td>
+            <td class="holdpin" class="pinstatus">NOCOMM</td>
+          </tr>
+          <tr>
+            <th scope="row">Reset Button</th>
+            <td></td>
+            <td class="resetpin" class="pinstatus">NOCOMM</td>
+            </td>
+          </tr>
+        </table>
       </div>
 
     </div>
@@ -864,7 +711,7 @@
   </body>
   <script type="text/javascript" src="lib/jquery.min.js"></script>
   <!-- <script type="text/javascript" src="/socket.io/socket.io.js"></script> -->
-  <script type="text/javascript" src="js/knob.js"></script>
+  <!-- <script type="text/javascript" src="js/knob.js"></script> -->
   <script type="text/javascript" src="js/jog.js"></script>
   <!-- <script type="text/javascript" src="js/socket.js"></script> -->
   <script type="text/javascript" src="js/buttons.js"></script>
@@ -1067,12 +914,16 @@
             const row = document.createElement('tr');
             const nameCell = document.createElement('td');
             const sizeCell = document.createElement('td');
-            const timeCell = document.createElement('td');
+            // const timeCell = document.createElement('td');
             const actionCell = document.createElement('td');
 
             nameCell.textContent = file.name;
             sizeCell.textContent = file.size;
-            timeCell.textContent = file.time;
+            // timeCell.textContent = file.time;
+
+            // Add click event to download the file
+            nameCell.style.cursor = 'pointer'; // Add pointer cursor to indicate clickable element
+            nameCell.onclick = () => downloadFile(ip, file.name);
 
             // Add RUN button for G-code files
             if (file.name.toLowerCase().endsWith('.gcode') || file.name.toLowerCase().endsWith('.g')) {
@@ -1085,7 +936,7 @@
 
             row.appendChild(nameCell);
             row.appendChild(sizeCell);
-            row.appendChild(timeCell);
+            // row.appendChild(timeCell);
             row.appendChild(actionCell);
             fileList.appendChild(row);
           });
@@ -1094,6 +945,33 @@
           logMessage("Error fetching file list: " + error);
         });
     }
+
+    // Function to download and read file content
+    function downloadFile(ip, filename) {
+      const fileUrl = `http://${ip}/${filename}`;
+
+      fetch(fileUrl)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.blob();
+        })
+        .then(blob => {
+          // Read the file content as text
+          return blob.text();
+        })
+        .then(fileContent => {
+          // Log the file content to the console
+          console.log('File content:', fileContent);
+          parseGcodeInWebWorker(fileContent);
+        })
+        .catch(error => {
+          console.error('Error downloading or reading file:', error);
+          logMessage('Error downloading or reading file: ' + error);
+        });
+    }
+
 
     // Run G-code file
     function runGcodeFile(fileName) {

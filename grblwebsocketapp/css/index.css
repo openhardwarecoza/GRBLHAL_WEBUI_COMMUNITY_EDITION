@@ -1,18 +1,20 @@
 body {
   font-family: "Arial", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
-  background: #7d7e7d;
-  /* Old browsers */
-  background: -moz-linear-gradient(left, #7d7e7d 0%, #0e0e0e 100%);
-  /* FF3.6-15 */
-  background: -webkit-linear-gradient(left, #7d7e7d 0%, #0e0e0e 100%);
-  /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to right, #7d7e7d 0%, #0e0e0e 100%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#7d7e7d', endColorstr='#0e0e0e', GradientType=1);
-  /* IE6-9 */
   font-size: 12px;
   color: #fff;
+  padding: 0px;
+  margin: 0px;
+  background-image: url('/img/scifibg.jpg');
+  /* Path to your background image */
+  background-size: cover;
+  /* Scale the background image to cover the entire viewport */
+  background-attachment: fixed;
+  /* Keep the background image fixed in place */
+  background-position: center;
+  /* Center the background image */
+  background-repeat: no-repeat;
+  /* Prevent the background from repeating */
+  overflow: hidden;
 }
 
 a {
@@ -20,24 +22,65 @@ a {
 }
 
 .titlebar {
-  background-color: #333;
+  background-color: rgba(51, 51, 51, 0.1);
   padding: 5px;
-  margin: 1px;
-  border-radius: 0px;
-  border: 1px solid;
-  border-image: linear-gradient(120deg,
-      hsl(200, 100%, 90%),
-      /* Light Blue */
-      hsl(200, 100%, 70%),
-      /* Medium Blue */
-      hsl(200, 100%, 50%)) 1;
-  /* Darker Blue */
+  margin: 2px;
+  border-radius: 5px;
+  /* border: 1px solid; */
   overflow: hidden;
   position: relative;
   z-index: 1;
-  box-shadow: 0px 0px 5px rgba(0, 200, 255, 0.75);
-  /* Light blue glow */
-  animation: animate-border 30s linear infinite;
+  /* box-shadow: 0px 0px 5px rgba(200, 200, 200, 0.75); */
+}
+
+#renderArea {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  /* Establishes a positioning context for absolutely positioned children */
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  /* Example background color */
+}
+
+.container-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 370px;
+  height: 100%;
+  background-color: rgba(5, 5, 5, 0.7);
+  padding: 2px;
+  margin: 2px;
+  border-right: 1px solid;
+  overflow: hidden;
+  box-shadow: 0px 0px 15px rgba(20, 20, 20, 0.75);
+}
+
+.container-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 370px;
+  height: 100%;
+  background-color: rgba(5, 5, 5, 0.7);
+  padding: 5px;
+  margin: 2px;
+  border-left: 1px solid;
+  overflow: hidden;
+  box-shadow: 0px 0px 15px rgba(20, 20, 20, 0.75);
+}
+
+@media (max-width: 768px) {
+
+  /* Responsive design for mobile */
+  .container-left, .container-right {
+    width: 100%;
+    /* Full width on small screens */
+    height: 50%;
+    /* Adjust height as needed */
+  }
 }
 
 /* .appbar {
@@ -121,15 +164,6 @@ input:focus, textarea, button:focus {
 
 .buttonspad>tbody>tr>td {
   padding: 3px;
-}
-
-.flex-container {
-  display: flex;
-  display: -webkit-flex;
-  /* Safari */
-  -webkit-flex-wrap: wrap;
-  /* Safari 6.1+ */
-  flex-wrap: wrap;
 }
 
 .pf {
@@ -223,59 +257,17 @@ input:focus, textarea, button:focus {
   margin-right: 5px;
 }
 
-.card {
-  flex: 0 0 auto;
-  background-color: #333;
-  padding: 5px;
-  margin: 1px;
-  border-radius: 5px;
-  border: 1px solid;
-  border-image: linear-gradient(120deg,
-      hsl(200, 100%, 90%),
-      /* Light Blue */
-      hsl(200, 100%, 70%),
-      /* Medium Blue */
-      hsl(200, 100%, 50%)) 1;
-  /* Darker Blue */
-  overflow: hidden;
-  position: relative;
-  z-index: 1;
-  box-shadow: 0px 0px 5px rgba(0, 200, 255, 0.75);
-  /* Light blue glow */
-  animation: animate-border 30s linear infinite;
-}
-
-@keyframes animate-border {
-  0% {
-    border-image: linear-gradient(0deg,
-        hsl(200, 100%, 90%),
-        hsl(200, 100%, 70%),
-        hsl(200, 100%, 50%)) 1;
-  }
-
-  50% {
-    border-image: linear-gradient(180deg,
-        hsl(200, 100%, 90%),
-        hsl(200, 100%, 70%),
-        hsl(200, 100%, 50%)) 1;
-  }
-
-  100% {
-    border-image: linear-gradient(360deg,
-        hsl(200, 100%, 90%),
-        hsl(200, 100%, 70%),
-        hsl(200, 100%, 50%)) 1;
-  }
-}
-
 .card-header {
   width: 100%;
   padding-top: 0px;
-  padding-bottom: 5px;
+  padding-bottom: 3px;
+  padding-top: 3px;
   padding-left: 5px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+  margin-top: 3px;
   margin-bottom: 3px;
   text-shadow: 0px 0px 3px #ccc;
 }
@@ -329,52 +321,46 @@ input:focus, textarea, button:focus {
   padding-bottom: 0px;
   position: relative;
   background-repeat: no-repeat;
-  height: 53px;
-  width: 170px;
+  height: 42px;
+  width: 120px;
   border: 1px solid #777;
   border-radius: 5px;
   padding-right: 5px;
-  background: rgba(232, 245, 214, 1);
-  background: -moz-linear-gradient(bottom, rgba(232, 245, 214, 1) 13%, rgba(247, 251, 240, 1) 43%, rgba(255, 255, 255, 1) 60%, rgba(255, 255, 255, 1) 83%);
-  background: -webkit-gradient(left top, right bottom, color-stop(13%, rgba(232, 245, 214, 1)), color-stop(43%, rgba(247, 251, 240, 1)), color-stop(60%, rgba(255, 255, 255, 1)), color-stop(83%, rgba(255, 255, 255, 1)));
-  background: -webkit-linear-gradient(bottom, rgba(232, 245, 214, 1) 13%, rgba(247, 251, 240, 1) 43%, rgba(255, 255, 255, 1) 60%, rgba(255, 255, 255, 1) 83%);
-  background: -o-linear-gradient(bottom, rgba(232, 245, 214, 1) 13%, rgba(247, 251, 240, 1) 43%, rgba(255, 255, 255, 1) 60%, rgba(255, 255, 255, 1) 83%);
-  background: -ms-linear-gradient(bottom, rgba(232, 245, 214, 1) 13%, rgba(247, 251, 240, 1) 43%, rgba(255, 255, 255, 1) 60%, rgba(255, 255, 255, 1) 83%);
-  background: linear-gradient(to bottom, rgba(232, 245, 214, 1) 13%, rgba(247, 251, 240, 1) 43%, rgba(255, 255, 255, 1) 60%, rgba(255, 255, 255, 1) 83%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e8f5d6', endColorstr='#ffffff', GradientType=1);
-  -webkit-box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.15);
-  -moz-box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.15);
-  /* box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.65); */
+  background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #1d1d1d), color-stop(1, #131313));
+  background: -ms-linear-gradient(bottom, #1d1d1d, #131313);
+  background: -moz-linear-gradient(center bottom, #1d1d1d 0%, #131313 100%);
+  background: -o-linear-gradient(#131313, #1d1d1d);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#131313', endColorstr='#1d1d1d', GradientType=0);
   box-shadow: 2px 3px 2px #111;
 }
 
 .dro-x {
-  color: #880000;
+  color: #fff;
   text-shadow: 0 0 2px #880000;
 }
 
 .dro-y {
-  color: #005500;
+  color: #fff;
   text-shadow: 0 0 2px #005500;
 }
 
 .dro-z {
-  color: #000088;
+  color: #fff;
   text-shadow: 0 0 2px #000088;
 }
 
 .dro-f {
-  color: #222;
+  color: #fff;
   text-shadow: 0 0 2px #222;
 }
 
 .dro-s {
-  color: #222;
+  color: #fff;
   text-shadow: 0 0 2px #222;
 }
 
 .dro-wpos {
-  font-size: 34px;
+  font-size: 24px;
   font-family: 'digital-7';
   font-weight: bold;
 }
@@ -395,10 +381,10 @@ input:focus, textarea, button:focus {
 }
 
 .jogbtn {
-  font-size: 11px;
+  font-size: 9px;
   border-radius: 5px;
-  width: 56px;
-  height: 56px;
+  width: 40px;
+  height: 44px;
   border: 1px solid #777;
   color: #eee;
   background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #1d1d1d), color-stop(1, #131313));
@@ -585,4 +571,78 @@ select::-ms-expand {
   background: white;
   cursor: inherit;
   display: block;
+}
+
+/* Slider */
+.slider-container {
+  border-radius: 5px;
+  border: 1px solid #777;
+  color: #eee;
+  background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #1d1d1d), color-stop(1, #131313));
+  background: -ms-linear-gradient(bottom, #1d1d1d, #131313);
+  background: -moz-linear-gradient(center bottom, #1d1d1d 0%, #131313 100%);
+  background: -o-linear-gradient(#131313, #1d1d1d);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#131313', endColorstr='#1d1d1d', GradientType=0);
+  box-shadow: 2px 3px 2px #111;
+}
+
+.slider-label {
+  display: block;
+  margin-bottom: 0px;
+  margin-left: 3px;
+  font-size: 12px;
+}
+
+.slider {
+  -webkit-appearance: none;
+  /* Override default CSS styles */
+  width: calc(100% - 5px);
+  height: 5px;
+  background: #777;
+  /* Track color */
+  border-radius: 5px;
+  outline: none;
+  /* Remove outline on focus */
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  /* Override default CSS styles */
+  appearance: none;
+  width: 20px;
+  /* Thumb width */
+  height: 15px;
+  /* Thumb height */
+  background: #fff;
+  box-shadow: 2px 3px 2px #111;
+  /* Thumb color */
+  border-radius: 25%;
+  /* Circular thumb */
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  /* Thumb width */
+  height: 20px;
+  /* Thumb height */
+  background: #fff;
+  /* Thumb color */
+  border-radius: 50%;
+  /* Circular thumb */
+  cursor: pointer;
+}
+
+.tickmarks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.tick {
+  font-size: 9px;
+  color: #ffffff;
+  /* Tick color */
 }

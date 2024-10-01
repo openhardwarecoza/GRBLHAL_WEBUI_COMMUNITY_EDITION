@@ -191,49 +191,12 @@ function drawWorkspace(xmin, xmax, ymin, ymax) {
   sceneLights.name = "Scene Lights"
   workspace.add(sceneLights);
 
-  scene.fog = new THREE.Fog(0xffffff, 1, 20000);
-
-  // SKYDOME
-
-  var uniforms = {
-    topColor: {
-      value: new THREE.Color(0x0077ff)
-    },
-    bottomColor: {
-      value: new THREE.Color(0xffffff)
-    },
-    offset: {
-      value: -63
-    },
-    exponent: {
-      value: 0.71
-    }
-  };
-  uniforms.topColor.value.copy(hemiLight.color);
-
-  scene.fog.color.copy(uniforms.bottomColor.value);
-
-  var vertexShader = document.getElementById('vertexShader').textContent;
-  var fragmentShader = document.getElementById('fragmentShader').textContent;
-
-  var skyGeo = new THREE.SphereGeometry(9900, 64, 15);
-  var skyMat = new THREE.ShaderMaterial({
-    vertexShader: vertexShader,
-    fragmentShader: fragmentShader,
-    uniforms: uniforms,
-    side: THREE.DoubleSide
-  });
-
-  sky = new THREE.Mesh(skyGeo, skyMat);
-  sky.name = "Skydome"
-  workspace.add(sky);
-
 
 
   var coneGeo = new THREE.CylinderGeometry(0, 5, 40, 15, 1, false)
   coneGeo.applyMatrix(new THREE.Matrix4().makeTranslation(0, -20, 0));
 
-  cone = new THREE.Mesh(coneGeo, new THREE.MeshPhongMaterial({
+  cone = new THREE.Mesh(coneGeo, new THREE.MeshLambertMaterial({
     color: 0x0000ff,
     specular: 0x0000ff,
     shininess: 00
@@ -329,11 +292,11 @@ function redrawGrid(xmin, xmax, ymin, ymax, inches) {
   axesgrp.add(ylbl);
 
   var materialX = new THREE.LineBasicMaterial({
-    color: 0xcc0000
+    color: 0xffffff
   });
 
   var materialY = new THREE.LineBasicMaterial({
-    color: 0x00cc00
+    color: 0xffffff
   });
 
   var geometryX = new THREE.Geometry();
@@ -417,7 +380,8 @@ function init3D() {
     renderer = new THREE.WebGLRenderer({
       autoClearColor: true,
       antialias: true,
-      preserveDrawingBuffer: true
+      preserveDrawingBuffer: true,
+      alpha: true
     });
     // ThreeJS Render/Control/Camera
     scene = new THREE.Scene();
@@ -425,7 +389,7 @@ function init3D() {
     camera.position.z = 295;
 
     $('#renderArea').append(renderer.domElement);
-    renderer.setClearColor(0x333333, 1); // Background color of viewer = transparent
+    renderer.setClearColor(0x000000, 0); // The second parameter is the alpha value
     // renderer.setSize(window.innerWidth - 10, window.innerHeight - 10);
     renderer.clear();
 
@@ -654,9 +618,9 @@ function fixRenderSize() {
       //renderer.setSize(window.innerWidth, window.innerHeight);
       camera.aspect = sceneWidth / sceneHeight;
       camera.updateProjectionMatrix();
-      if (!disable3Dcontrols) {
-        controls.reset();
-      }
+
+      controls.reset();
+
       setTimeout(function() {
         resetView();
       }, 10);
@@ -713,7 +677,7 @@ function drawMachineCoordinates(status) {
     machineCoordinateSpace = new THREE.Group();
 
     var material = new THREE.LineBasicMaterial({
-      color: 0x888888,
+      color: 0xffffff,
       transparent: true,
       opacity: 0.3
     });

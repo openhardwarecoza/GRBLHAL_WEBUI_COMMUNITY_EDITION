@@ -7,7 +7,7 @@ function drawRuler(xmin, xmax, ymin, ymax) {
   // console.log(xmin, xmax, ymin, ymax)
   var ruler = new THREE.Group();
   var material = new THREE.LineBasicMaterial({
-    color: 0x888888
+    color: 0xcccccc
   });
 
   material.opacity = 0.15;
@@ -143,7 +143,7 @@ function drawRulerInches(xmin, xmax, ymin, ymax) {
 
   var ruler = new THREE.Group();
   var material = new THREE.LineBasicMaterial({
-    color: 0x555555
+    color: 0xcccccc
   });
 
   material.opacity = 0.30;

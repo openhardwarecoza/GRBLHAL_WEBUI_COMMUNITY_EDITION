@@ -35,21 +35,21 @@ function convertParsedDataToObject(jsonData) {
     positions.push(x, y, z);
 
     if (parsedData.linePoints[i].g == 0) {
-      colors.push(Theme.lines[0].R);
-      colors.push(Theme.lines[0].G);
-      colors.push(Theme.lines[0].B);
+      colors.push(0);
+      colors.push(200);
+      colors.push(0);
     } else if (parsedData.linePoints[i].g == 1) {
-      colors.push(Theme.lines[1].R);
-      colors.push(Theme.lines[1].G);
-      colors.push(Theme.lines[1].B);
+      colors.push(200);
+      colors.push(0);
+      colors.push(0);
     } else if (parsedData.linePoints[i].g == 2) {
-      colors.push(Theme.lines[2].R);
-      colors.push(Theme.lines[2].G);
-      colors.push(Theme.lines[2].B);
+      colors.push(0);
+      colors.push(0);
+      colors.push(200);
     } else {
-      colors.push(Theme.lines[3].R);
-      colors.push(Theme.lines[3].G);
-      colors.push(Theme.lines[3].B);
+      colors.push(200);
+      colors.push(0);
+      colors.push(200);
     }
 
   }
@@ -74,86 +74,85 @@ function convertParsedDataToObject(jsonData) {
 
 function parseGcodeInWebWorker(gcode) {
   if (webgl) {
-    if (!disable3Dgcodepreview) {
-      simstop()
-      scene.remove(object)
-      object = false;
+    simstop()
+    scene.remove(object)
+    object = false;
 
-      // var worker = new Worker('lib/3dview/workers/gcodeparser.js');
-      var worker = new Worker('lib/3dview/workers/verylitegcodeviewer.js');
-      worker.addEventListener('message', function(e) {
-        // console.log('webworker message', e)
-        if (e.data.progress != undefined) {
-          $('#3dviewlabel').html(' 3D View (rendering, please wait... ' + e.data.progress + '% )')
-        } else {
-          if (scene.getObjectByName('gcodeobject')) {
-            scene.remove(scene.getObjectByName('gcodeobject'))
-            object = false;
-          }
-          object = convertParsedDataToObject(e.data);
-          //console.log(object)
-          if (object && object.userData.linePoints.length > 1) {
-            worker.terminate();
-            scene.add(object);
-            if (object.userData.inch) {
-              // console.log(scaling)
-              object.scale.x = 25.4
-              object.scale.y = 25.4
-              object.scale.z = 25.4
-            }
-
-            if (localStorage.getItem('unitsMode')) {
-              if (localStorage.getItem('unitsMode') == "in") {
-                if (object.userData.inch) {
-                  redrawGrid(object.userData.bbbox2.min.x, object.userData.bbbox2.max.x, object.userData.bbbox2.min.y, object.userData.bbbox2.max.y, true);
-                } else {
-                  redrawGrid(object.userData.bbbox2.min.x / 25.4, object.userData.bbbox2.max.x / 25.4, object.userData.bbbox2.min.y / 25.4, object.userData.bbbox2.max.y / 25.4, true);
-                }
-              } else {
-                if (object.userData.inch) {
-                  redrawGrid(object.userData.bbbox2.min.x * 25.4, object.userData.bbbox2.max.x * 25.4, object.userData.bbbox2.min.y * 25.4, object.userData.bbbox2.max.y * 25.4, false);
-                } else {
-                  redrawGrid(object.userData.bbbox2.min.x, object.userData.bbbox2.max.x, object.userData.bbbox2.min.y, object.userData.bbbox2.max.y, false);
-                }
-              }
-            }
-            // animate();
-            setTimeout(function() {
-              if (webgl) {
-                $('#gcodeviewertab').click();
-              }
-              clearSceneFlag = true;
-              resetView();
-              // animate();
-              var timeremain = object.userData.totalTime;
-
-              if (!isNaN(timeremain)) {
-                //console.log(timeConvert(timeremain));
-                // output formattedTime to UI here
-                $('#timeRemaining').html(timeConvert(timeremain) + " / " + timeConvert(timeremain));
-                printLog("<span class='fg-red'>[ GCODE Parser ]</span><span class='fg-darkGreen'> GCODE Preview Rendered Succesfully: Total lines: <b>" + object.userData.linePoints.length + "</b> / Estimated GCODE Run Time: <b>" + timeConvert(timeremain) + "</b>")
-              }
-            }, 200);
-            $('#3dviewicon').removeClass('fa-pulse');
-            $('#3dviewlabel').html(' 3D View')
-          } else {
-            // Didn't get an Object
-            $('#3dviewicon').removeClass('fa-pulse');
-            $('#3dviewlabel').html(' 3D View')
-          }
+    // var worker = new Worker('lib/3dview/workers/gcodeparser.js');
+    var worker = new Worker('lib/3dview/workers/verylitegcodeviewer.js');
+    worker.addEventListener('message', function(e) {
+      // console.log('webworker message', e)
+      if (e.data.progress != undefined) {
+        $('#3dviewlabel').html(' 3D View (rendering, please wait... ' + e.data.progress + '% )')
+      } else {
+        if (scene.getObjectByName('gcodeobject')) {
+          scene.remove(scene.getObjectByName('gcodeobject'))
+          object = false;
         }
+        object = convertParsedDataToObject(e.data);
+        //console.log(object)
+        if (object && object.userData.linePoints.length > 1) {
+          worker.terminate();
+          scene.add(object);
+          if (object.userData.inch) {
+            // console.log(scaling)
+            object.scale.x = 25.4
+            object.scale.y = 25.4
+            object.scale.z = 25.4
+          }
 
-      }, false);
+          if (localStorage.getItem('unitsMode')) {
+            if (localStorage.getItem('unitsMode') == "in") {
+              if (object.userData.inch) {
+                redrawGrid(object.userData.bbbox2.min.x, object.userData.bbbox2.max.x, object.userData.bbbox2.min.y, object.userData.bbbox2.max.y, true);
+              } else {
+                redrawGrid(object.userData.bbbox2.min.x / 25.4, object.userData.bbbox2.max.x / 25.4, object.userData.bbbox2.min.y / 25.4, object.userData.bbbox2.max.y / 25.4, true);
+              }
+            } else {
+              if (object.userData.inch) {
+                redrawGrid(object.userData.bbbox2.min.x * 25.4, object.userData.bbbox2.max.x * 25.4, object.userData.bbbox2.min.y * 25.4, object.userData.bbbox2.max.y * 25.4, false);
+              } else {
+                redrawGrid(object.userData.bbbox2.min.x, object.userData.bbbox2.max.x, object.userData.bbbox2.min.y, object.userData.bbbox2.max.y, false);
+              }
+            }
+          }
+          // animate();
+          setTimeout(function() {
+            if (webgl) {
+              $('#gcodeviewertab').click();
+            }
+            clearSceneFlag = true;
+            resetView();
+            // animate();
+            var timeremain = object.userData.totalTime;
 
-      worker.postMessage({
-        'data': gcode
-      });
+            if (!isNaN(timeremain)) {
+              //console.log(timeConvert(timeremain));
+              // output formattedTime to UI here
+              $('#timeRemaining').html(timeConvert(timeremain) + " / " + timeConvert(timeremain));
+              printLog("<span class='fg-red'>[ GCODE Parser ]</span><span class='fg-darkGreen'> GCODE Preview Rendered Succesfully: Total lines: <b>" + object.userData.linePoints.length + "</b> / Estimated GCODE Run Time: <b>" + timeConvert(timeremain) + "</b>")
+            }
+          }, 200);
+          $('#3dviewicon').removeClass('fa-pulse');
+          $('#3dviewlabel').html(' 3D View')
+        } else {
+          // Didn't get an Object
+          $('#3dviewicon').removeClass('fa-pulse');
+          $('#3dviewlabel').html(' 3D View')
+        }
+      }
 
-      $('#3dviewicon').addClass('fa-pulse');
-      $('#3dviewlabel').html(' 3D View (rendering, please wait...)')
+    }, false);
 
-      // populateToolChanges(gcode)
-    }
+    worker.postMessage({
+      'data': gcode
+    });
+
+    $('#3dviewicon').addClass('fa-pulse');
+    $('#3dviewlabel').html(' 3D View (rendering, please wait...)')
+
+    // populateToolChanges(gcode)
+
   }
 };
 
@@ -309,7 +308,7 @@ function simstop() {
   $('#stopSimBtn').hide()
   // timefactor = 1;
   $('#simspeedval').text(timefactor);
-  editor.gotoLine(0)
+  // editor.gotoLine(0)
   $("#conetext").hide();
   clearSceneFlag = true;
   cone.material = new THREE.MeshPhongMaterial({
@@ -365,3 +364,19 @@ function toScreenPosition(obj, camera) {
   };
 
 };
+
+function timeConvert(n) {
+  var num = n;
+  var hours = (num / 60);
+  var rhours = Math.floor(hours);
+  var minutes = (hours - rhours) * 60;
+  var rminutes = Math.round(minutes);
+  //return num + " minutes = " + rhours + " hour(s) and " + rminutes + " minute(s).";
+  if (rhours < 10) {
+    rhours = "0" + rhours
+  }
+  if (rminutes < 10) {
+    rminutes = "0" + rminutes
+  }
+  return rhours + "h:" + rminutes + "m";
+}
