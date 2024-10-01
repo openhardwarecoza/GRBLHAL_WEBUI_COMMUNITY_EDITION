@@ -1,147 +1,843 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
   <head>
-    <meta charset="utf-8">
-    <title>WebSocket Communication with grblHAL</title>
-    <style>
-      #chat {
-        width: 97%;
-      }
+    <title>HALforge</title>
+    <link rel="apple-touch-icon" href="/favicon.svg">
+    <link rel="icon" type="image/svg" href="/favicon.svg">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ffffff">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="css/knob.css" />
 
-      .message:before {
-        content: ' ';
-        color: #bbb;
-        font-size: 14px;
-      }
+    <script defer src="lib/fontawesome/js/all.js"></script>
 
-      #log {
-        overflow: auto;
-        max-height: 300px;
-        list-style: none;
-        padding: 0;
-      }
-
-      #log li {
-        font: normal 12px "Courier New", Courier, sans-serif;
-        border-top: 1px solid #ccc;
-        margin: 0;
-        padding: 10px 0;
-      }
-
-
-      body {
-        font: normal 16px/20px "Helvetica Neue", Helvetica, sans-serif;
-        background: rgb(237, 237, 236);
-        margin: 0;
-        margin-top: 40px;
-        padding: 0;
-      }
-
-      section,
-      header {
-        display: block;
-      }
-
-      #wrapper {
-        width: 90%;
-        margin: 0 auto;
-        background: #fff;
-        border-radius: 10px;
-        border-top: 1px solid #fff;
-        padding-bottom: 16px;
-      }
-
-      h1 {
-        padding-top: 10px;
-      }
-
-      h2 {
-        font-size: 100%;
-        font-style: italic;
-      }
-
-      header,
-      article>* {
-        margin: 20px;
-      }
-
-      #status {
-        padding: 5px;
-        color: #fff;
-        background: #ccc;
-      }
-
-      #status.fail {
-        background: #c00;
-      }
-
-      #status.success {
-        background: #0c0;
-      }
-
-      #html5badge {
-        margin-left: -30px;
-        border: 0;
-      }
-
-      #html5badge img {
-        border: 0;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-      }
-
-      th,
-      td {
-        border: 1px solid #ccc;
-        padding: 8px;
-        text-align: left;
-      }
-
-      th {
-        background-color: #f2f2f2;
-      }
-
-      button {
-        margin-left: 10px;
-      }
-    </style>
   </head>
 
   <body>
-    <section id="wrapper">
-      <header>
-        <h1>grblHAL WebSocket Chat</h1>
-      </header>
 
-      <article>
-        <label for="ipAddress">Enter WebSocket IP Address:</label>
-        <input type="text" id="ipAddress" value="192.168.0.106">
-        <button id="connectBtn">Connect</button>
-        <button id="disconnectBtn" disabled>Disconnect</button>
+    <div class="titlebar">
+      <a href="" target="_new"><img src="logo.svg"></a>
+    </div>
+    <!-- <div class="appbar">Grbl.js</div> -->
+
+    <div class="flex-container">
+
+      <div class="card">
+        <div class="card-header">DRO</div>
+        <table class="buttonspad">
+          <tr>
+            <td class="bd-radius-all">
+              <div class="dro dro-x">
+                <div class="axis">X</div>
+                <div class="xWPos dro-wpos">0.000</div>
+                <div class="xWPos dro-mpos">0.000</div>
+              </div>
+            </td>
+            <td><button class="jogbtn ripple singleaxishomingbtn" id="homexbtn" disabled>HOME X</button></td>
+            <td><button class="jogbtn ripple" id="gozeroxbtn">GO ZERO MACH X</button></td>
+            <td><button class="jogbtn ripple" id="setzeroxbtn">SET ZERO WORK X</button></td>
+            <td><button class="jogbtn ripple" id="gozeroxworkbtn">GO ZERO WORK X</button></td>
+            <td><button class="jogbtn ripple" id="probexbtn" disabled>PROBE X ZERO</button></td>
+          </tr>
+          <tr>
+            <td class="bd-radius-all">
+              <div class="dro dro-y">
+                <div class="axis">Y</div>
+                <div class="yWPos dro-wpos">0.000</div>
+                <div class="yMPos dro-mpos">0.000</div>
+              </div>
+            </td>
+            <td><button class="jogbtn ripple singleaxishomingbtn" id="homeybtn" disabled>HOME Y</button></td>
+            <td><button class="jogbtn ripple" id="gozeroybtn">GO ZERO MACH Y</button></td>
+            <td><button class="jogbtn ripple" id="setzeroybtn">SET ZERO WORK Y</button></td>
+            <td><button class="jogbtn ripple" id="gozeroyworkbtn">GO ZERO WORK Y</button></td>
+            <td><button class="jogbtn ripple" id="probeybtn" disabled>PROBE Y ZERO</button></td>
+          </tr>
+          <tr>
+            <td class="bd-radius-all">
+              <div class="dro dro-z">
+                <div class="axis">Z</div>
+                <div class="zWPos dro-wpos">0.000</div>
+                <div class="zMPos dro-mpos">0.000</div>
+              </div>
+            </td>
+            <td><button class="jogbtn ripple singleaxishomingbtn" id="homezbtn" disabled>HOME Z</button></td>
+            <td><button class="jogbtn ripple" id="gozerozbtn">GO ZERO MACH Z</button></td>
+            <td><button class="jogbtn ripple" id="setzerozbtn">SET ZERO WORK Z</button></td>
+            <td><button class="jogbtn ripple" id="gozerozworkbtn">GO ZERO WORK Z</button></td>
+            <td><button class="jogbtn ripple" id="probezbtn" disabled>PROBE Z ZERO</button></td>
+          </tr>
+          <tr>
+            <td class="bd-radius-all">
+              <div class="dro dro-f">
+                <div class="axis axis-f">F</div>
+                <div class="fVal dro-wpos">0.000</div>
+                <div class="fValOverride dro-mpos">0.000</div>
+              </div>
+            </td>
+            <td><button class="jogbtn ripple singleaxishomingbtn" id="homexyzbtn" disabled>HOME XYZ</button></td>
+            <td><button class="jogbtn ripple" id="gozeroxyzbtn">GO ZERO MACH XYZ</button></td>
+            <td><button class="jogbtn ripple" id="setzeroxyzbtn">SET ZERO WORK XYZ</button></td>
+            <td><button class="jogbtn ripple" id="gozeroxyzworkbtn">GO ZERO WORK XYZ</button></td>
+            <td><button class="jogbtn ripple" id="probexyzbtn" disabled>PROBE XYZ ZERO</button></td>
+          </tr>
+          <tr>
+            <td class="bd-radius-all">
+              <div class="dro dro-s">
+                <div class="axis axis-s">S</div>
+                <div class="sVal dro-wpos">0.000</div>
+                <div class="sValOverride dro-mpos">0.000</div>
+              </div>
+            </td>
+            <td><button class="jogbtn ripple led" id="m3btn">TOOL M3</button></td>
+            <td><button class="jogbtn ripple led" id="m4btn" disabled>TOOL M4</button></td>
+            <td><button class="jogbtn ripple led" id="m8btn">COOL FLUSH M8</button></td>
+            <td><button class="jogbtn ripple led" id="m7btn" disabled>COOL MIST M7</button></td>
+            <td><button class="jogbtn ripple" id="" disabled></button></td>
+          </tr>
+        </table>
+        </center>
+      </div>
+
+
+      <div class="card">
+        <div class="card-header">Override</div>
+
+        <div class="knob-surround">
+          <span id="currentfeed">0%</span>
+          <div id="knobfeed"></div>
+          <span class="knob-title">FEED</span>
+          <span class="knob-reset ripple"><button class="knob-reset-btn ripple" id="reset-feed">reset</button></span>
+          <div class="ticks">
+            <div class="ticksfeed activetick"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+            <div class="ticksfeed"></div>
+          </div>
+        </div>
+
+        <div class="knob-surround">
+          <span id="currentrapid">0%</span>
+          <div id="knobrapid"></div>
+          <span class="knob-title">RAPID</span>
+          <span class="knob-reset ripple"><button class="knob-reset-btn ripple" id="reset-rapid">reset</button></span>
+          <div class="ticks">
+            <div class="ticksrapid activetick"></div>
+            <div class="ticksrapid"></div>
+            <div class="ticksrapid"></div>
+            <div class="ticksrapid"></div>
+            <div class="ticksrapid"></div>
+            <div class="ticksrapid"></div>
+            <div class="ticksrapid"></div>
+            <div class="ticksrapid"></div>
+            <div class="ticksrapid"></div>
+            <div class="ticksrapid"></div>
+            <div class="ticksrapid"></div>
+            <div class="ticksrapid"></div>
+            <div class="ticksrapid"></div>
+            <div class="ticksrapid"></div>
+            <div class="ticksrapid"></div>
+            <div class="ticksrapid"></div>
+          </div>
+        </div>
+
+        <div class="knob-surround">
+          <span id="currentspeed">0%</span>
+          <div id="knobspeed"></div>
+          <span class="knob-title">SPEED</span>
+          <span class="knob-reset ripple"><button class="knob-reset-btn ripple" id="reset-speed">reset</button></span>
+          <div class="ticks">
+            <div class="ticksspeed activetick"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+            <div class="ticksspeed"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">WCS / MODALS</div>
+        <center>
+          <table class="buttonspad">
+            <tr>
+              <td><button class="jogbtn ripple wcsbtn led ledactive" id="g54btn">ACT G54 WCS</button></td>
+              <td><button class="jogbtn ripple wcsbtn led" id="g55btn">ACT G55 WCS</button></td>
+              <td><button class="jogbtn ripple wcsbtn led" id="g56btn">ACT G56 WCS</button></td>
+              <td><button class="jogbtn ripple wcsbtn led" id="g57btn">ACT G57 WCS</button></td>
+              <td><button class="jogbtn ripple wcsbtn led" id="g58btn">ACT G58 WCS</button></td>
+              <td><button class="jogbtn ripple wcsbtn led" id="g59btn">ACT G59 WCS</button></td>
+            </tr>
+          </table>
+          <table class="buttonspad">
+            <tr>
+              <td><button class="jogbtn ripple unitsmodebtn led" id="g20btn">G20 INCH MODE</button></td>
+              <td></td>
+              <td><button class="jogbtn ripple distancemodebtn led" id="g90btn">G90 ABS MODE</button></td>
+              <td></td>
+              <td><button class="jogbtn ripple feedmodebtn led" id="g93btn">G93 INV TIME FEED</button></td>
+            </tr>
+            <tr>
+              <td><button class="jogbtn ripple unitsmodebtn led" id="g21btn">G21 MM MODE</button></td>
+              <td></td>
+              <td><button class="jogbtn ripple distancemodebtn led" id="g91btn">G91 INCR MODE</button></td>
+              <td></td>
+              <td><button class="jogbtn ripple feedmodebtn led" id="g94btn">G94 UNITS /MIN FEED</button></td>
+            </tr>
+          </table>
+          <table class="buttonspad">
+            <tr>
+              <td><button class="jogbtn ripple" id="" disabled>SET G28.1 OFFST</button></td>
+              <td></td>
+              <td><button class="jogbtn ripple" id="" disabled>SET G30 OFFST</button></td>
+              <td></td>
+              <td><button class="jogbtn ripple" id="" disabled>SET G92 OFFST</button></td>
+              <td></td>
+              <td><button class="jogbtn ripple led" id="g43.1btn" disabled>SET G43.1 TOOL COMP</button></td>
+
+            </tr>
+            <tr>
+              <td><button class="jogbtn ripple" id="" disabled>GO G28.1 OFFST</button></td>
+              <td></td>
+              <td><button class="jogbtn ripple" id="" disabled>GO G30 OFFST</button></td>
+              <td></td>
+              <td><button class="jogbtn ripple" id="" disabled>CLEAR G92 OFFST</button></td>
+              <td></td>
+              <td><button class="jogbtn ripple led" id="g49btn" disabled>NO TOOL COMP G49</button></td>
+            </tr>
+          </table>
+        </center>
+      </div>
+
+      <div class="card">
+        <div class="card-header">JOG</div>
+        <table>
+          <tr>
+            <td rowspan="2">
+              <button class="jogbtn ripple jogbtn-x" id="xM">
+                <span class="fa-layers fa-fw">
+                  <i class="fas fa-arrow-left" data-fa-transform="grow-8 down-1.5"></i>
+                  <span class="fa-layers-text" data-fa-transform="grow-5 up-24" style="font-weight:600">X-</span>
+                  <span class="fa-layers-text distlabel" data-fa-transform="grow-2 down-24" style="font-weight:600">10mm</span>
+                </span>
+              </button>
+            </td>
+            <td>
+              <button class="jogbtn ripple jogbtn-y" id="yP">
+                <span class="fa-layers fa-fw">
+                  <i class="fas fa-arrow-up" data-fa-transform="grow-8 down-1.5"></i>
+                  <span class="fa-layers-text" data-fa-transform="grow-5 up-24" style="font-weight:600">Y+</span>
+                  <span class="fa-layers-text distlabel" data-fa-transform="grow-2 down-24" style="font-weight:600">10mm</span>
+                </span>
+              </button>
+            </td>
+            <td rowspan="2">
+              <button class="jogbtn ripple jogbtn-x" id="xP">
+                <span class="fa-layers fa-fw">
+                  <i class="fas fa-arrow-right" data-fa-transform="grow-8 down-1.5"></i>
+                  <span class="fa-layers-text" data-fa-transform="grow-5 up-24" style="font-weight:600">X+</span>
+                  <span class="fa-layers-text distlabel" data-fa-transform="grow-2 down-24" style="font-weight:600">10mm</span>
+                </span>
+              </button>
+            </td>
+            <td>
+              <button class="jogbtn ripple jogbtn-z" id="zP">
+                <span class="fa-layers fa-fw">
+                  <i class="fas fa-arrow-up" data-fa-transform="grow-8 down-1.5"></i>
+                  <span class="fa-layers-text" data-fa-transform="grow-5 up-24" style="font-weight:600">Z+</span>
+                  <span class="fa-layers-text distlabel" data-fa-transform="grow-2 down-24" style="font-weight:600">10mm</span>
+                </span>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <button class="jogbtn ripple jogbtn-y" id="yM">
+                <span class="fa-layers fa-fw">
+                  <i class="fas fa-arrow-down" data-fa-transform="grow-8 down-1.5"></i>
+                  <span class="fa-layers-text" data-fa-transform="grow-5 up-24" style="font-weight:600">Y-</span>
+                  <span class="fa-layers-text distlabel" data-fa-transform="grow-2 down-24" style="font-weight:600">10mm</span>
+                </span>
+              </button>
+            </td>
+            <td>
+              <button class="jogbtn ripple jogbtn-z" id="zM">
+                <span class="fa-layers fa-fw">
+                  <i class="fas fa-arrow-down" data-fa-transform="grow-8 down-1.5"></i>
+                  <span class="fa-layers-text" data-fa-transform="grow-5 up-24" style="font-weight:600">Z-</span>
+                  <span class="fa-layers-text distlabel" data-fa-transform="grow-2 down-24" style="font-weight:600">10mm</span>
+                </span>
+              </button>
+            </td>
+          </tr>
+        </table>
+
+        <table>
+          <tr>
+            <td><button class="jogbtn ripple distbtn led" id="dist01">0.1mm</button></td>
+            <td><button class="jogbtn ripple distbtn led" id="dist1">1mm</button></td>
+            <td><button class="jogbtn ripple distbtn led ledactive" id="dist10">10mm</button></td>
+            <td><button class="jogbtn ripple distbtn led" id="dist100">100mm</button></td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-header">JOG RATE</div>
+        <div class="knob-surround">
+          <span id="currentxyjograte">0 mm/min</span>
+          <span id="unitzjograte">mm/min</span>
+          <div id="knobxyjograte"></div>
+          <span class="knob-title">XY&nbsp;JOG&nbsp;RATE</span>
+          <!-- <span class="knob-reset ripple"><button class="knob-reset-btn ripple" id="reset-feed">reset</button></span> -->
+          <div class="ticks">
+            <div class="ticksxyjograte activetick"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+            <div class="ticksxyjograte"></div>
+          </div>
+        </div>
+        <div class="knob-surround">
+          <span id="currentzjograte">0 mm/min</span>
+          <span id="unitzjograte">mm/min</span>
+          <div id="knobzjograte"></div>
+          <span class="knob-title">Z&nbsp;JOG&nbsp;RATE</span>
+          <!-- <span class="knob-reset ripple"><button class="knob-reset-btn ripple" id="reset-feed">reset</button></span> -->
+          <div class="ticks">
+            <div class="tickszjograte activetick"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+            <div class="tickszjograte"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">Interface</div>
+        <div class="InputAddOn">
+          <span class="InputAddOn-item"><i class="fab fa-usb"></i></span>
+          <input class="InputAddOn-field" type="text" list="portslist" id="ipAddress" value="192.168.0.106" autocomplete="on">
+          <datalist id="portslist">
+          </datalist>
+          <button type="button" class="InputAddOn-item success ripple" id="connectBtn">Connect</button>
+          <button type="button" class="InputAddOn-item alert ripple" id="disconnectBtn">Disconnect</button>
+        </div>
 
         <p id="status">Not connected</p>
 
-        <ul id="log"></ul>
+        <div class="monitor" id="console">
+          <ul id="log"></ul>
+        </div>
 
         <form onsubmit="addMessage(); return false;">
-          <input type="text" id="chat" placeholder="Type and press enter to send command to grblHAL" />
+          <div class="InputAddOn">
+            <span class="InputAddOn-item"><i class="fas fa-terminal"></i></span>
+            <input type="text" class="InputAddOn-field" placeholder="" aria-label="Console Command" id="chat">
+            <button class="InputAddOn-item ripple" type="button" onclick="$('#log').empty();"><i class="fas fa-trash"></i></button>
+          </div>
         </form>
+      </div>
+
+
+      <div class="card">
+        <div class="card-header">Job</div>
+        <div class="button-group">
+          <button type="button" class="button-group-item jogbtn ripple" id="playBtn"><i class="fas fa-play"></i></button>
+          <button type="button" class="button-group-item jogbtn ripple" id="pauseBtn"><i class="fas fa-pause"></i></button>
+          <button type="button" class="button-group-item jogbtn ripple" id="resumeBtn"><i class="fas fa-play"></i></button>
+          <button type="button" class="button-group-item jogbtn ripple" id="stopBtn"><i class="fas fa-stop"></i></button>
+          <button type="button" class="button-group-item jogbtn ripple" id="clearAlarmBtn">
+            <span class="fa-layers" data-toggle="tooltip" data-placement="bottom" title="Flashes red when machine has entered ALARM state, click Clear Alarm button">
+              <i id="navbell" class="fas fa-bell text-alert" style="display: none;"></i>
+              <i class="far fa-bell"></i>
+            </span>
+          </button>
+        </div>
+
+      </div>
+
+      <div class="card">
+        <div class="card-header">Parameters</div>
+        <div style="height: 200px; overflow-y: auto; ">
+
+          <table class="table">
+            <tr>
+              <th scope="col">Accesories</th>
+              <th scope="col"></th>
+              <th scope="col">State</th>
+            </tr>
+            <tr>
+              <th scope="row">SPINDLE</th>
+              <td></td>
+              <td class="accSpindle"></td>
+            </tr>
+            <tr>
+              <th scope="row">COOLANT</th>
+              <td></td>
+              <td class="accCoolant"></td>
+            </tr>
+            <tr>
+              <th scope="row">MIST</th>
+              <td></td>
+              <td class="accMist"></td>
+            </tr>
+            <tr>
+              <th scope="col">Position</th>
+              <th scope="col">Work</th>
+              <th scope="col">Machine</th>
+            </tr>
+            <tr>
+              <th scope="row">X</th>
+              <td class="xWPos">0.00</td>
+              <td class="xMPos">0.00</td>
+            </tr>
+            <tr>
+              <th scope="row">Y</th>
+              <td class="yWPos">0.00</td>
+              <td class="yMPos">0.00</td>
+            </tr>
+            <tr>
+              <th scope="row">Z</th>
+              <td class="zWPos">0.00</td>
+              <td class="zMPos">0.00</td>
+            </tr>
+            <tr>
+              <th scope="col">Overrides</th>
+              <th scope="col">Actual</th>
+              <th scope="col">Override</th>
+            </tr>
+            <tr>
+              <th scope="row">M3 Sxx</th>
+              <td class="sVal">0</td>
+              <td class="sValOverride">0</td>
+            </tr>
+            <tr>
+              <th scope="row">G1 F</th>
+              <td class="fVal">0</td>
+              <td class="fValOverride">0</td>
+            </tr>
+            <tr>
+              <th scope="row">Rapid</th>
+              <td class="rapidVal"></td>
+              <td class="rapidOverride">0</td>
+            </tr>
+            <tr>
+              <th scope="col">Modal</th>
+              <th scope="col">
+              </th>
+              <th scope="col">Value</th>
+            </tr>
+            <tr>
+              <th scope="row">Motion Mode</th>
+              <td></td>
+              <td class="motionmode"></td>
+            </tr>
+            <tr>
+              <th scope="row">Coordinate System Select</th>
+              <td></td>
+              <td class="coordinatesys"></td>
+            </tr>
+            <tr>
+              <th scope="row">Plane Select</th>
+              <td></td>
+              <td class="plane"></td>
+            </tr>
+            <tr>
+              <th scope="row">Distance Mode</th>
+              <td></td>
+              <td class="distancemode"></td>
+            </tr>
+            <tr>
+              <th scope="row">Arc IJK Distance Mode</th>
+              <td></td>
+              <td class="arcdistmode"></td>
+            </tr>
+            <tr>
+              <th scope="row">Feed Rate Mode</th>
+              <td></td>
+              <td class="feedratemode"></td>
+            </tr>
+            <tr>
+              <th scope="row">Units Mode</th>
+              <td></td>
+              <td class="unitsmode"></td>
+            </tr>
+            <tr>
+              <th scope="row">Tool Length set</th>
+              <td></td>
+              <td class="tlomode"></td>
+            </tr>
+            <tr>
+              <th scope="row">Program Mode</th>
+              <td></td>
+              <td class="programmode"></td>
+            </tr>
+            <tr>
+              <th scope="row">Spindle State</th>
+              <td></td>
+              <td class="spindlestate"></td>
+            </tr>
+            <tr>
+              <th scope="row">Coolant State</th>
+              <td></td>
+              <td class="coolantstate"></td>
+            </tr>
+            <tr>
+              <th scope="row">Cutter Radius Compensation </th>
+              <td></td>
+              <td class="radiuscomp"></td>
+            </tr>
+            <tr>
+              <th scope="row">Modal Tool T?</th>
+              <td></td>
+              <td class="modaltool"></td>
+            </tr>
+            <tr>
+              <th scope="row">Modal Spindle S? </th>
+              <td></td>
+              <td class="modalspindle"></td>
+            </tr>
+            <tr>
+              <th scope="row">Modal Feedrate F? </th>
+              <td></td>
+              <td class="modalfeedrate"></td>
+            </tr>
+            <tr>
+              <th scope="col">Info</th>
+              <th scope="col">
+              </th>
+              <th scope="col">Value</th>
+            </tr>
+            <tr>
+              <th scope="row">blocked</th>
+              <td></td>
+              <td><span class="commsBlocked"></span></td>
+            </tr>
+            <tr>
+              <th scope="row">connectionStatus</th>
+              <td></td>
+              <td><span class="commsConnectionStatus"></span></td>
+            </tr>
+            <tr>
+              <th scope="row">USB Connection</th>
+              <td></td>
+              <td><span class="activeConnection"></span></td>
+            </tr>
+            <tr>
+              <th scope="row">Buffer</th>
+              <td></td>
+              <td><span class="commsBuffer"></span></td>
+            </tr>
+            <tr>
+              <th scope="row">Queue</th>
+              <td></td>
+              <td><span class="commsQueue"></span></td>
+            </tr>
+            <tr>
+              <th scope="row">IP</th>
+              <td></td>
+              <td><span class="driverIP"></span></td>
+            </tr>
+            <tr>
+              <th scope="row">O/S</th>
+              <td></td>
+              <td><span class="driverOS"></span></td>
+            </tr>
+            <tr>
+              <th scope="row">Version</th>
+              <td></td>
+              <td><span class="driverVer"></span></td>
+            </tr>
+            <tr>
+              <th scope="row">Grbl Version</th>
+              <td></td>
+              <td><span class="grblVer"></span></td>
+            </tr>
+            <tr>
+              <th scope="col">Compiled</th>
+              <th scope="col">
+              </th>
+              <th scope="col">Value</th>
+            </tr>
+            <tr>
+              <th scope="row">Variable Spindle</th>
+              <td></td>
+              <td class="enVariableSpindle"></td>
+            </tr>
+            <tr>
+              <th scope="row">Laser Mode Enabled ($32 Setting)</th>
+              <td></td>
+              <td class="enLaser"></td>
+            </tr>
+            <tr>
+              <th scope="row">Grbl-Servo Installed</th>
+              <td></td>
+              <td class="enServo"></td>
+            </tr>
+            <tr>
+              <th scope="row">Line Numbers Enabled</th>
+              <td></td>
+              <td class="enLineNumbers"></td>
+            </tr>
+            <tr>
+              <th scope="row">Mist Cooling Enabled</th>
+              <td></td>
+              <td class="enMisting"></td>
+            </tr>
+            <tr>
+              <th scope="row">CoreXY Enabled</th>
+              <td></td>
+              <td class="enCoreXY"></td>
+            </tr>
+            <tr>
+              <th scope="row">Parking Motion Enabled</th>
+              <td></td>
+              <td class="enParking"></td>
+            </tr>
+            <tr>
+              <th scope="row">Homing Force Origin Enabled</th>
+              <td></td>
+              <td class="enHomingOrigin"></td>
+            </tr>
+            <tr>
+              <th scope="row">Single Axis Homing</th>
+              <td></td>
+              <td class="enSingleAxisHome"></td>
+            </tr>
+            <tr>
+              <th scope="row">Two Limit Switches on Axis Enabled</th>
+              <td></td>
+              <td class="enTwoLimits"></td>
+            </tr>
+            <tr>
+              <th scope="row">Allow Feed Override in Probe</th>
+              <td></td>
+              <td class="enFeedOVProbe"></td>
+            </tr>
+            <tr>
+              <th scope="row">Restore EEPROM $-settings Disabled</th>
+              <td></td>
+              <td class="enEepromSettingsDisable"></td>
+            </tr>
+            <tr>
+              <th scope="row">Restore EEPROM parameter Disabled</th>
+              <td></td>
+              <td class="enEepromParamsDisable"></td>
+            </tr>
+            <tr>
+              <th scope="row">Build Info Write Disabled</th>
+              <td></td>
+              <td class="enBuildInfoDisabled"></td>
+            </tr>
+            <tr>
+              <th scope="row">Force Sync on EEPROM write Disabled</th>
+              <td></td>
+              <td class="enForceSyncEeprom"></td>
+            </tr>
+            <tr>
+              <th scope="row">Force Sync on WCO Disabled</th>
+              <td></td>
+              <td class="enForceSyncWco"></td>
+            </tr>
+            <tr>
+              <th scope="row">Homing Init Lock</th>
+              <td></td>
+              <td class="enHomingInitLock"></td>
+            </tr>
+            <tr>
+              <th scope="row">Dual Motor Homing</th>
+              <td></td>
+              <td class="enDualAxisHoming"></td>
+            </tr>
+            <tr>
+              <th scope="col">Pins</th>
+              <th scope="col">
+              </th>
+              <th scope="col">Value</th>
+            </tr>
+            <tr>
+              <th scope="row">X-Limit</th>
+              <td></td>
+              <td class="xpin" class="pinstatus">NOCOMM</td>
+            </tr>
+            <tr>
+              <th scope="row">Y-Limit</th>
+              <td></td>
+              <td class="ypin" class="pinstatus">NOCOMM</td>
+            </tr>
+            <tr>
+              <th scope="row">Z-Limit</th>
+              <td></td>
+              <td class="zpin" class="pinstatus">NOCOMM</td>
+            </tr>
+            <tr>
+              <th scope="row">Probe</th>
+              <td></td>
+              <td class="prbpin" class="pinstatus">NOCOMM</td>
+            </tr>
+            <tr>
+              <th scope="row">Door Sensor</th>
+              <td></td>
+              <td class="doorpin" class="pinstatus">NOCOMM</td>
+            </tr>
+            <tr>
+              <th scope="row">Start Button</th>
+              <td></td>
+              <td class="startpin" class="pinstatus">NOCOMM</td>
+            </tr>
+            <tr>
+              <th scope="row">Hold Button</th>
+              <td></td>
+              <td class="holdpin" class="pinstatus">NOCOMM</td>
+            </tr>
+            <tr>
+              <th scope="row">Reset Button</th>
+              <td></td>
+              <td class="resetpin" class="pinstatus">NOCOMM</td>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">3D View</div>
+
+        <button class="btn ripple" onclick="simSpeed();"><i class="fas fa-tachometer-alt"></i> <span id="simspeedval">1</span>x</button>
+        <button id="runSimBtn" title="Run simulation" class="btn ripple" onclick="sim(0)"><i class="fas fa-fighter-jet"></i> Simulate</button>
+        <button id="stopSimBtn" style="display: none;" title="Stop Sim" class="btn ripple" onclick="simstop()"><i class="fas fa-stop"></i> Stop Sim</button>
+        <button id="resetViewBtn" title="Resets camera angle and zoom" class="btn ripple" onclick="resetView(object)"><i class="fas fa-stop"></i> Reset View</button>
+
+
+        <div id="renderArea"></div>
+
+        <div id="conetext" style="position:absolute;top:0px;left:0px; padding: 0px; display:none; z-index:100;"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">SD Card</div>
+        <button id="refreshBtn" class="btn ripple"><i class="fas fa-sync-alt"></i> Refresh SD</button>
+        <button id="uploadSDbtn" class="btn ripple btn-file"><i class="fas fa-upload"></i><input class="btn-file" id="file" type="file" accept=".gcode, .gc, .tap, .nc, .cnc" />&nbsp;Upload</button>
+
 
         <!-- File upload section -->
-        <div>
+        <!-- <div>
           <label for="fileInput">Upload File:</label>
           <input type="file" id="fileInput" />
           <button id="uploadBtn" disabled>Upload</button>
-        </div>
+        </div> -->
 
-        <!-- File listing section -->
-        <div>
-          <button id="refreshBtn">Refresh File List</button>
+
+
+
+
+        <div style="height: 200px; overflow-y: auto; ">
           <table id="fileTable">
             <thead>
               <tr>
@@ -154,238 +850,294 @@
             <tbody id="fileList"></tbody>
           </table>
         </div>
-      </article>
+      </div>
 
-      <script>
-        // Initializing global variables
-        let websocket = null;
-        let intervalId = null;
+    </div>
 
-        const log = document.getElementById("log");
-        const chat = document.getElementById("chat");
-        const status = document.getElementById("status");
-        const ipAddressInput = document.getElementById("ipAddress");
-        const connectBtn = document.getElementById("connectBtn");
-        const disconnectBtn = document.getElementById("disconnectBtn");
-        const fileInput = document.getElementById("fileInput");
-        const uploadBtn = document.getElementById("uploadBtn");
-        const fileList = document.getElementById("fileList");
-        const refreshBtn = document.getElementById("refreshBtn");
 
-        // Function to safely display HTML tags
-        function safe_tags(str) {
-          return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        }
 
-        // Log messages to the log div
-        function logMessage(message) {
-          log.innerHTML = '<li class="message">' + safe_tags(message) + '</li>' + log.innerHTML;
-        }
 
-        // Function to update status
-        function updateStatus(connected) {
-          if (connected) {
-            status.className = "success";
-            status.innerHTML = "Connected to grblHAL";
-            connectBtn.disabled = true;
-            disconnectBtn.disabled = false;
-            uploadBtn.disabled = false; // Enable upload button when connected
-          } else {
-            status.className = "fail";
-            status.innerHTML = "Not connected";
-            connectBtn.disabled = false;
-            disconnectBtn.disabled = true;
-            uploadBtn.disabled = true; // Disable upload button when disconnected
-          }
-        }
 
-        // Handle WebSocket events
-        function onOpen() {
-          updateStatus(true);
-          websocket.send("$I\n"); // Send an initial command
 
-          // Start sending "?" every second
-          intervalId = setInterval(function() {
-            if (websocket.readyState === WebSocket.OPEN) {
-              websocket.send("?");
-            }
-          }, 1000);
 
-          // Fetch the file list when connected
-          fetchFileList();
-        }
 
-        function onClose() {
-          updateStatus(false);
-          clearInterval(intervalId); // Clear interval when closed
-        }
-
-        function onMessage(evt) {
-          // Split the incoming message by newlines
-          const messages = evt.data.split('\n');
-
-          // Log each line separately
-          messages.forEach(message => {
-            if (message.trim()) { // Check if the message is not empty
-              logMessage(message);
-            }
-          });
-        }
-
-        function onError() {
-          updateStatus(false);
-          logMessage("Communication error");
-          clearInterval(intervalId); // Clear interval on error
-        }
-
-        // Function to establish WebSocket connection
-        function connectWebSocket() {
-          const ip = ipAddressInput.value.trim();
-          const wsUri = `ws://${ip}:81`;
-
-          websocket = new WebSocket(wsUri);
-          websocket.onopen = onOpen;
-          websocket.onclose = onClose;
-          websocket.onmessage = onMessage;
-          websocket.onerror = onError;
-        }
-
-        // Add message to WebSocket
-        function addMessage() {
-          const message = chat.value;
-          chat.value = ""; // Clear input field
-          websocket.send(message + "\n");
-        }
-
-        // File upload function
-        function uploadFile() {
-          const file = fileInput.files[0];
-          if (file) {
-            const ip = ipAddressInput.value.trim();
-            const timestamp = Date.now();
-            const url = `http://${ip}/sdfiles?t=${timestamp}`;
-
-            const formData = new FormData();
-            formData.append("file", file);
-
-            // Use fetch API to POST the file
-            fetch(url, {
-                method: "POST",
-                body: formData
-              })
-              .then(response => {
-                if (response.ok) {
-                  logMessage("File uploaded successfully!");
-                  fetchFileList();
-                } else {
-                  logMessage("File upload failed: " + response.statusText);
-                  fetchFileList();
-                }
-              })
-              .catch(error => {
-                logMessage("Error uploading file: " + error);
-                fetchFileList();
-              });
-          } else {
-            logMessage("No file selected for upload.");
-            fetchFileList();
-          }
-        }
-
-        // Fetch and display file list
-        function fetchFileList() {
-          const ip = ipAddressInput.value.trim();
-          const timestamp = Date.now();
-          const url = `http://${ip}/sdfiles?path=%2F&action=list&t=${timestamp}`;
-
-          fetch(url)
-            .then(response => response.json())
-            .then(data => {
-              // Clear existing file list
-              fileList.innerHTML = '';
-
-              // Display new file list
-              data.files.forEach(file => {
-                const row = document.createElement('tr');
-                const nameCell = document.createElement('td');
-                const sizeCell = document.createElement('td');
-                const timeCell = document.createElement('td');
-                const actionCell = document.createElement('td');
-
-                nameCell.textContent = file.name;
-                sizeCell.textContent = file.size;
-                timeCell.textContent = file.time;
-
-                // Add RUN button for G-code files
-                if (file.name.toLowerCase().endsWith('.gcode') || file.name.toLowerCase().endsWith('.g')) {
-                  const runBtn = document.createElement('button');
-                  runBtn.textContent = 'Run';
-                  runBtn.onclick = () => runGcodeFile(file.name);
-                  actionCell.appendChild(runBtn);
-                }
-
-                row.appendChild(nameCell);
-                row.appendChild(sizeCell);
-                row.appendChild(timeCell);
-                row.appendChild(actionCell);
-                fileList.appendChild(row);
-              });
-            })
-            .catch(error => {
-              logMessage("Error fetching file list: " + error);
-            });
-        }
-
-        // Run G-code file
-        function runGcodeFile(fileName) {
-          const ip = ipAddressInput.value.trim();
-          const timestamp = Date.now();
-          const encodedFileName = encodeURIComponent(fileName);
-          const url = `http://${ip}/command?cmd=%24F%3D%2F${encodedFileName}&t=${timestamp}`;
-
-          fetch(url)
-            .then(response => {
-              if (response.ok) {
-                logMessage(`Running G-code file: ${fileName}`);
-              } else {
-                logMessage("Error running G-code file: " + response.statusText);
-              }
-            })
-            .catch(error => {
-              logMessage("Error running G-code file: " + error);
-            });
-        }
-
-        // Connect button click event
-        connectBtn.addEventListener('click', function() {
-          connectWebSocket();
-        });
-
-        // Disconnect button click event
-        disconnectBtn.addEventListener('click', function() {
-          if (websocket && websocket.readyState === WebSocket.OPEN) {
-            websocket.close();
-          }
-        });
-
-        // Upload button click event
-        uploadBtn.addEventListener('click', function() {
-          uploadFile();
-        });
-
-        // Refresh button click event
-        refreshBtn.addEventListener('click', function() {
-          fetchFileList();
-        });
-
-        // Add message on Enter press
-        chat.addEventListener('keydown', function(event) {
-          if (event.key === 'Enter') {
-            addMessage();
-          }
-        });
-      </script>
-    </section>
   </body>
+  <script type="text/javascript" src="lib/jquery.min.js"></script>
+  <!-- <script type="text/javascript" src="/socket.io/socket.io.js"></script> -->
+  <script type="text/javascript" src="js/knob.js"></script>
+  <script type="text/javascript" src="js/jog.js"></script>
+  <!-- <script type="text/javascript" src="js/socket.js"></script> -->
+  <script type="text/javascript" src="js/buttons.js"></script>
+  <script type="text/javascript" src="js/sd.js"></script>
+
+  <script type="text/javascript" src="lib/threejs/three.min.js"></script>
+  <script type="text/javascript" src="lib/threejs/GridRect.js"></script>
+  <script type="text/javascript" src="lib/threejs/OrbitControls.js"></script>
+  <script type="text/javascript" src="lib/threejs/DragControls.js"></script>
+  <script type="text/javascript" src="lib/threejs/Projector.js"></script>
+  <script type="text/javascript" src="lib/threejs/CanvasRenderer.js"></script>
+  <script type="text/javascript" src="lib/threejs/TransformControls.js"></script>
+  <script type="text/javascript" src="lib/threejs/TweenMax.min.js"></script>
+  <script type="text/javascript" src="lib/threejs/STLLoader.js"></script>
+
+  <script type="text/javascript" src="js/viewer.js"></script>
+  <script type="text/javascript" src="js/viewer-ruler.js"></script>
+
+  <script type="text/javascript" src="lib/3dview/3dview.js"></script>
+
+  <script type="x-shader/x-vertex" id="vertexShader">
+    varying vec3 vWorldPosition; void main() { vec4 worldPosition = modelMatrix * vec4( position, 1.0 ); vWorldPosition = worldPosition.xyz; gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 ); }
+  </script>
+  <script type="x-shader/x-fragment" id="fragmentShader">
+    uniform vec3 topColor; uniform vec3 bottomColor; uniform float offset; uniform float exponent; varying vec3 vWorldPosition; void main() { float h = normalize( vWorldPosition + offset ).z; gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max(
+    h , 0.0), exponent ), 0.0 ) ), 1.0 ); }
+
+  </script>
+
+  <script>
+    // Initializing global variables
+    let cv = null;
+    let intervalId = null;
+
+    const log = document.getElementById("log");
+    const chat = document.getElementById("chat");
+    const status = document.getElementById("status");
+    const ipAddressInput = document.getElementById("ipAddress");
+    const connectBtn = document.getElementById("connectBtn");
+    const disconnectBtn = document.getElementById("disconnectBtn");
+    const fileInput = document.getElementById("file");
+    const uploadBtn = document.getElementById("uploadSDbtn");
+    const fileList = document.getElementById("fileList");
+    const refreshBtn = document.getElementById("refreshBtn");
+
+    // Function to safely display HTML tags
+    function safe_tags(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    // Log messages to the log div
+    function logMessage(message) {
+      var time = new Date();
+      var timeNow = '[' + (time.getHours() < 10 ? '0' : '') + time.getHours() + ":" + (time.getMinutes() < 10 ? '0' : '') + time.getMinutes() + ":" + (time.getSeconds() < 10 ? '0' : '') + time.getSeconds() + ']&nbsp;'
+      log.innerHTML = '<li class="message">' + timeNow + safe_tags(message) + '</li>' + log.innerHTML;
+    }
+
+    function printLog(message) {
+      var time = new Date();
+      var timeNow = '[' + (time.getHours() < 10 ? '0' : '') + time.getHours() + ":" + (time.getMinutes() < 10 ? '0' : '') + time.getMinutes() + ":" + (time.getSeconds() < 10 ? '0' : '') + time.getSeconds() + ']&nbsp;'
+      log.innerHTML = '<li class="message">' + timeNow + safe_tags(message) + '</li>' + log.innerHTML;
+    }
+
+    // Function to update status
+    function updateStatus(connected) {
+      if (connected) {
+        status.className = "success";
+        status.innerHTML = "Connected to grblHAL";
+        connectBtn.disabled = true;
+        disconnectBtn.disabled = false;
+        uploadBtn.disabled = false; // Enable upload button when connected
+      } else {
+        status.className = "fail";
+        status.innerHTML = "Not connected";
+        connectBtn.disabled = false;
+        disconnectBtn.disabled = true;
+        uploadBtn.disabled = true; // Disable upload button when disconnected
+      }
+    }
+
+    // Handle WebSocket events
+    function onOpen() {
+      updateStatus(true);
+      websocket.send("$I\n"); // Send an initial command
+
+      // Start sending "?" every second
+      intervalId = setInterval(function() {
+
+        if (websocket.readyState === WebSocket.OPEN) {
+          websocket.send("?");
+        } else {
+          console.log("websocket blocked")
+        }
+      }, 1000);
+
+      // Fetch the file list when connected
+      fetchFileList();
+    }
+
+    function onClose() {
+      updateStatus(false);
+      logMessage("Communication CLOSED");
+      console.log("Websocket CLOSED: Normally")
+      clearInterval(intervalId); // Clear interval when closed
+    }
+
+    function onMessage(evt) {
+      // Split the incoming message by newlines
+      const messages = evt.data.split('\n');
+
+      // Log each line separately
+      messages.forEach(message => {
+        if (message.trim()) { // Check if the message is not empty
+          logMessage(message);
+        }
+      });
+    }
+
+    function onError() {
+      updateStatus(false);
+      logMessage("Communication error");
+      console.log("Websocket CLOSED: ERROR")
+      clearInterval(intervalId); // Clear interval on error
+    }
+
+    // Function to establish WebSocket connection
+    function connectWebSocket() {
+      const ip = ipAddressInput.value.trim();
+      const wsUri = `ws://${ip}:81`;
+      console.log("Connecting to: " + wsUri)
+      websocket = new WebSocket(wsUri);
+      websocket.onopen = onOpen;
+      websocket.onclose = onClose;
+      websocket.onmessage = onMessage;
+      websocket.onerror = onError;
+    }
+
+    // Add message to WebSocket
+    function addMessage() {
+      const message = chat.value;
+      chat.value = ""; // Clear input field
+      websocket.send(message + "\n");
+    }
+
+    // Moved to sd.js
+    // // File upload function
+    // function uploadFile() {
+    //   const file = fileInput.files[0];
+    //   if (file) {
+    //     const ip = ipAddressInput.value.trim();
+    //     const timestamp = Date.now();
+    //     const url = `http://${ip}/sdfiles?t=${timestamp}`;
+    //
+    //     const formData = new FormData();
+    //     formData.append("file", file);
+    //
+    //     // Use fetch API to POST the file
+    //     fetch(url, {
+    //         method: "POST",
+    //         body: formData
+    //       })
+    //       .then(response => {
+    //         if (response.ok) {
+    //           logMessage("File uploaded successfully!");
+    //           fetchFileList();
+    //         } else {
+    //           logMessage("File upload failed: " + response.statusText);
+    //           fetchFileList();
+    //         }
+    //       })
+    //       .catch(error => {
+    //         logMessage("Error uploading file: " + error);
+    //         fetchFileList();
+    //       });
+    //   } else {
+    //     logMessage("No file selected for upload.");
+    //     fetchFileList();
+    //   }
+    // }
+
+    // Fetch and display file list
+    function fetchFileList() {
+      const ip = ipAddressInput.value.trim();
+      const timestamp = Date.now();
+      const url = `http://${ip}/sdfiles?path=%2F&action=list&t=${timestamp}`;
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          // Clear existing file list
+          fileList.innerHTML = '';
+
+          // Sort files by time (newest first)
+          data.files.sort((a, b) => {
+            return new Date(b.time) - new Date(a.time);
+          });
+
+          // Display new file list
+          data.files.forEach(file => {
+            const row = document.createElement('tr');
+            const nameCell = document.createElement('td');
+            const sizeCell = document.createElement('td');
+            const timeCell = document.createElement('td');
+            const actionCell = document.createElement('td');
+
+            nameCell.textContent = file.name;
+            sizeCell.textContent = file.size;
+            timeCell.textContent = file.time;
+
+            // Add RUN button for G-code files
+            if (file.name.toLowerCase().endsWith('.gcode') || file.name.toLowerCase().endsWith('.g')) {
+              const runBtn = document.createElement('button');
+              runBtn.textContent = 'Run';
+              runBtn.className = 'btn'; // Add the .btn class
+              runBtn.onclick = () => runGcodeFile(file.name);
+              actionCell.appendChild(runBtn);
+            }
+
+            row.appendChild(nameCell);
+            row.appendChild(sizeCell);
+            row.appendChild(timeCell);
+            row.appendChild(actionCell);
+            fileList.appendChild(row);
+          });
+        })
+        .catch(error => {
+          logMessage("Error fetching file list: " + error);
+        });
+    }
+
+    // Run G-code file
+    function runGcodeFile(fileName) {
+      const ip = ipAddressInput.value.trim();
+      const timestamp = Date.now();
+      const encodedFileName = encodeURIComponent(fileName);
+      const url = `http://${ip}/command?cmd=%24F%3D%2F${encodedFileName}&t=${timestamp}`;
+
+      fetch(url)
+        .then(response => {
+          if (response.ok) {
+            logMessage(`Running G-code file: ${fileName}`);
+          } else {
+            logMessage("Error running G-code file: " + response.statusText);
+          }
+        })
+        .catch(error => {
+          logMessage("Error running G-code file: " + error);
+        });
+    }
+
+    // Connect button click event
+    connectBtn.addEventListener('click', function() {
+      connectWebSocket();
+    });
+
+    // Disconnect button click event
+    disconnectBtn.addEventListener('click', function() {
+      if (websocket && websocket.readyState === WebSocket.OPEN) {
+        websocket.close();
+      }
+    });
+
+    // Refresh button click event
+    refreshBtn.addEventListener('click', function() {
+      fetchFileList();
+    });
+
+    // Add message on Enter press
+    chat.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        addMessage();
+      }
+    });
+  </script>
 
 </html>
