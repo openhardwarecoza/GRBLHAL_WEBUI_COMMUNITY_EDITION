@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <title>NCC</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="css/index.css">
+  </head>
+
+  <body>
+
+    <div id="viewer3d">
+      <div id="selection" style="visibility: hidden;"></div>
+    </div>
+
+    <div id="sidebar">
+
+      <button class="button-ncc button-file">
+        Open
+        <input class="btn-file" id="file-selector" type="file" accept=".dxf" />
+      </button>
+
+      <button class="button-ncc button-file" id="clearScene">
+        Reset View
+      </button>
+
+    </div>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.2/require.min.js'></script>
+
+
+    <script src="js/3dview.js" type="module"></script>
+
+    <script src="js/file.js" type="module"></script>
+
+
+  </body>
+
+</html>

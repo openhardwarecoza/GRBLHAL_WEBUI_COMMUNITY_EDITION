@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNC Machine Jog Controls</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h1,
+      h2 {
+        text-align: center;
+      }
+
+      .jog-controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .axis-controls {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .axis-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .arrow-buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      button {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+        margin: 5px 0;
+      }
+
+      .sliders {
+        margin: 20px 0;
+      }
+
+      .sliders input {
+        width: 100%;
+      }
+
+      .digital-readouts {
+        text-align: center;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="jog-controls">
+        <h1>CNC Machine Jog Controls</h1>
+        <div class="axis-controls">
+          <!-- Y Axis Control -->
+          <div class="axis-column">
+            <h2>Y Axis</h2>
+            <div class="arrow-buttons">
+              <button onclick="jog('Y', 1)">↑</button>
+              <button onclick="jog('Y', -1)">↓</button>
+            </div>
+          </div>
+          <!-- X Axis Control -->
+          <div class="axis-column">
+            <h2>X Axis</h2>
+            <div class="arrow-buttons">
+              <button onclick="jog('X', -1)">←</button>
+              <button onclick="jog('X', 1)">→</button>
+            </div>
+          </div>
+          <!-- Z Axis Control -->
+          <div class="axis-column">
+            <h2>Z Axis</h2>
+            <div class="arrow-buttons">
+              <button onclick="jog('Z', 1)">↑</button>
+              <button onclick="jog('Z', -1)">↓</button>
+            </div>
+          </div>
+          <!-- Spin Controls for A Axis -->
+          <div class="axis-column">
+            <h2>A Axis</h2>
+            <div class="arrow-buttons">
+              <button onclick="jog('A', -1)">🔄</button>
+              <button onclick="jog('A', 1)">🔄</button>
+            </div>
+          </div>
+          <div class="axis-column" style="grid-column: span 3;">
+            <h2>Jog Speed, Tool Override & Feed Override</h2>
+            <div class="sliders">
+              <label for="jogSpeed">Jog Speed:</label>
+              <input type="range" id="jogSpeed" min="1" max="100" value="50">
+              <label for="toolOverride">Tool Override:</label>
+              <input type="range" id="toolOverride" min="0" max="100" value="100">
+              <label for="feedOverride">Feed Override:</label>
+              <input type="range" id="feedOverride" min="0" max="100" value="100">
+            </div>
+          </div>
+        </div>
+
+        <div class="digital-readouts">
+          <h2>Current Position</h2>
+          <p>X: <span id="posX">0</span></p>
+          <p>Y: <span id="posY">0</span></p>
+          <p>Z: <span id="posZ">0</span></p>
+          <p>A: <span id="posA">0</span></p>
+        </div>
+      </div>
+    </div>
+    <script>
+      function jog(axis, direction) {
+        // Update the digital readouts based on the jog action
+        let pos = parseInt(document.getElementById(`pos${axis}`).innerText);
+        let speed = document.getElementById('jogSpeed').value;
+
+        // Simulate jogging
+        pos += direction * speed / 10; // Adjust the divisor to change sensitivity
+        document.getElementById(`pos${axis}`).innerText = pos.toFixed(2);
+      }
+    </script>
+  </body>
+
+</html>

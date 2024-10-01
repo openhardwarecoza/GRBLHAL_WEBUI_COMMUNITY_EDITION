@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title>WebSocket Communication with grblHAL</title>
+    <style>
+      #chat {
+        width: 97%;
+      }
+
+      .message:before {
+        content: ' ';
+        color: #bbb;
+        font-size: 14px;
+      }
+
+      #log {
+        overflow: auto;
+        max-height: 300px;
+        list-style: none;
+        padding: 0;
+      }
+
+      #log li {
+        font: normal 12px "Courier New", Courier, sans-serif;
+        border-top: 1px solid #ccc;
+        margin: 0;
+        padding: 10px 0;
+      }
+
+
+      body {
+        font: normal 16px/20px "Helvetica Neue", Helvetica, sans-serif;
+        background: rgb(237, 237, 236);
+        margin: 0;
+        margin-top: 40px;
+        padding: 0;
+      }
+
+      section,
+      header {
+        display: block;
+      }
+
+      #wrapper {
+        width: 90%;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 10px;
+        border-top: 1px solid #fff;
+        padding-bottom: 16px;
+      }
+
+      h1 {
+        padding-top: 10px;
+      }
+
+      h2 {
+        font-size: 100%;
+        font-style: italic;
+      }
+
+      header,
+      article>* {
+        margin: 20px;
+      }
+
+      #status {
+        padding: 5px;
+        color: #fff;
+        background: #ccc;
+      }
+
+      #status.fail {
+        background: #c00;
+      }
+
+      #status.success {
+        background: #0c0;
+      }
+
+      #html5badge {
+        margin-left: -30px;
+        border: 0;
+      }
+
+      #html5badge img {
+        border: 0;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+      }
+
+      th {
+        background-color: #f2f2f2;
+      }
+
+      button {
+        margin-left: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <section id="wrapper">
+      <header>
+        <h1>grblHAL WebSocket Chat</h1>
+      </header>
+
+      <article>
+        <label for="ipAddress">Enter WebSocket IP Address:</label>
+        <input type="text" id="ipAddress" value="192.168.0.106">
+        <button id="connectBtn">Connect</button>
+        <button id="disconnectBtn" disabled>Disconnect</button>
+
+        <p id="status">Not connected</p>
+
+        <ul id="log"></ul>
+
+        <form onsubmit="addMessage(); return false;">
+          <input type="text" id="chat" placeholder="Type and press enter to send command to grblHAL" />
+        </form>
+
+        <!-- File upload section -->
+        <div>
+          <label for="fileInput">Upload File:</label>
+          <input type="file" id="fileInput" />
+          <button id="uploadBtn" disabled>Upload</button>
+        </div>
+
+        <!-- File listing section -->
+        <div>
+          <button id="refreshBtn">Refresh File List</button>
+          <table id="fileTable">
+            <thead>
+              <tr>
+                <th>File Name</th>
+                <th>Size</th>
+                <th>Last Modified</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="fileList"></tbody>
+          </table>
+        </div>
+      </article>
+
+      <script>
+        // Initializing global variables
+        let websocket = null;
+        let intervalId = null;
+
+        const log = document.getElementById("log");
+        const chat = document.getElementById("chat");
+        const status = document.getElementById("status");
+        const ipAddressInput = document.getElementById("ipAddress");
+        const connectBtn = document.getElementById("connectBtn");
+        const disconnectBtn = document.getElementById("disconnectBtn");
+        const fileInput = document.getElementById("fileInput");
+        const uploadBtn = document.getElementById("uploadBtn");
+        const fileList = document.getElementById("fileList");
+        const refreshBtn = document.getElementById("refreshBtn");
+
+        // Function to safely display HTML tags
+        function safe_tags(str) {
+          return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        // Log messages to the log div
+        function logMessage(message) {
+          log.innerHTML = '<li class="message">' + safe_tags(message) + '</li>' + log.innerHTML;
+        }
+
+        // Function to update status
+        function updateStatus(connected) {
+          if (connected) {
+            status.className = "success";
+            status.innerHTML = "Connected to grblHAL";
+            connectBtn.disabled = true;
+            disconnectBtn.disabled = false;
+            uploadBtn.disabled = false; // Enable upload button when connected
+          } else {
+            status.className = "fail";
+            status.innerHTML = "Not connected";
+            connectBtn.disabled = false;
+            disconnectBtn.disabled = true;
+            uploadBtn.disabled = true; // Disable upload button when disconnected
+          }
+        }
+
+        // Handle WebSocket events
+        function onOpen() {
+          updateStatus(true);
+          websocket.send("$I\n"); // Send an initial command
+
+          // Start sending "?" every second
+          intervalId = setInterval(function() {
+            if (websocket.readyState === WebSocket.OPEN) {
+              websocket.send("?");
+            }
+          }, 1000);
+
+          // Fetch the file list when connected
+          fetchFileList();
+        }
+
+        function onClose() {
+          updateStatus(false);
+          clearInterval(intervalId); // Clear interval when closed
+        }
+
+        function onMessage(evt) {
+          // Split the incoming message by newlines
+          const messages = evt.data.split('\n');
+
+          // Log each line separately
+          messages.forEach(message => {
+            if (message.trim()) { // Check if the message is not empty
+              logMessage(message);
+            }
+          });
+        }
+
+        function onError() {
+          updateStatus(false);
+          logMessage("Communication error");
+          clearInterval(intervalId); // Clear interval on error
+        }
+
+        // Function to establish WebSocket connection
+        function connectWebSocket() {
+          const ip = ipAddressInput.value.trim();
+          const wsUri = `ws://${ip}:81`;
+
+          websocket = new WebSocket(wsUri);
+          websocket.onopen = onOpen;
+          websocket.onclose = onClose;
+          websocket.onmessage = onMessage;
+          websocket.onerror = onError;
+        }
+
+        // Add message to WebSocket
+        function addMessage() {
+          const message = chat.value;
+          chat.value = ""; // Clear input field
+          websocket.send(message + "\n");
+        }
+
+        // File upload function
+        function uploadFile() {
+          const file = fileInput.files[0];
+          if (file) {
+            const ip = ipAddressInput.value.trim();
+            const timestamp = Date.now();
+            const url = `http://${ip}/sdfiles?t=${timestamp}`;
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            // Use fetch API to POST the file
+            fetch(url, {
+                method: "POST",
+                body: formData
+              })
+              .then(response => {
+                if (response.ok) {
+                  logMessage("File uploaded successfully!");
+                  fetchFileList();
+                } else {
+                  logMessage("File upload failed: " + response.statusText);
+                  fetchFileList();
+                }
+              })
+              .catch(error => {
+                logMessage("Error uploading file: " + error);
+                fetchFileList();
+              });
+          } else {
+            logMessage("No file selected for upload.");
+            fetchFileList();
+          }
+        }
+
+        // Fetch and display file list
+        function fetchFileList() {
+          const ip = ipAddressInput.value.trim();
+          const timestamp = Date.now();
+          const url = `http://${ip}/sdfiles?path=%2F&action=list&t=${timestamp}`;
+
+          fetch(url)
+            .then(response => response.json())
+            .then(data => {
+              // Clear existing file list
+              fileList.innerHTML = '';
+
+              // Display new file list
+              data.files.forEach(file => {
+                const row = document.createElement('tr');
+                const nameCell = document.createElement('td');
+                const sizeCell = document.createElement('td');
+                const timeCell = document.createElement('td');
+                const actionCell = document.createElement('td');
+
+                nameCell.textContent = file.name;
+                sizeCell.textContent = file.size;
+                timeCell.textContent = file.time;
+
+                // Add RUN button for G-code files
+                if (file.name.toLowerCase().endsWith('.gcode') || file.name.toLowerCase().endsWith('.g')) {
+                  const runBtn = document.createElement('button');
+                  runBtn.textContent = 'Run';
+                  runBtn.onclick = () => runGcodeFile(file.name);
+                  actionCell.appendChild(runBtn);
+                }
+
+                row.appendChild(nameCell);
+                row.appendChild(sizeCell);
+                row.appendChild(timeCell);
+                row.appendChild(actionCell);
+                fileList.appendChild(row);
+              });
+            })
+            .catch(error => {
+              logMessage("Error fetching file list: " + error);
+            });
+        }
+
+        // Run G-code file
+        function runGcodeFile(fileName) {
+          const ip = ipAddressInput.value.trim();
+          const timestamp = Date.now();
+          const encodedFileName = encodeURIComponent(fileName);
+          const url = `http://${ip}/command?cmd=%24F%3D%2F${encodedFileName}&t=${timestamp}`;
+
+          fetch(url)
+            .then(response => {
+              if (response.ok) {
+                logMessage(`Running G-code file: ${fileName}`);
+              } else {
+                logMessage("Error running G-code file: " + response.statusText);
+              }
+            })
+            .catch(error => {
+              logMessage("Error running G-code file: " + error);
+            });
+        }
+
+        // Connect button click event
+        connectBtn.addEventListener('click', function() {
+          connectWebSocket();
+        });
+
+        // Disconnect button click event
+        disconnectBtn.addEventListener('click', function() {
+          if (websocket && websocket.readyState === WebSocket.OPEN) {
+            websocket.close();
+          }
+        });
+
+        // Upload button click event
+        uploadBtn.addEventListener('click', function() {
+          uploadFile();
+        });
+
+        // Refresh button click event
+        refreshBtn.addEventListener('click', function() {
+          fetchFileList();
+        });
+
+        // Add message on Enter press
+        chat.addEventListener('keydown', function(event) {
+          if (event.key === 'Enter') {
+            addMessage();
+          }
+        });
+      </script>
+    </section>
+  </body>
+
+</html>
